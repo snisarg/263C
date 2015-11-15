@@ -1,13 +1,12 @@
-config:
-  grid:
+grid:
+  width: 25
+  height: 25
+  cell:
     width: 25
     height: 25
-    cell:
-      width: 25
-      height: 25
 
-  obstacles:
-    single: 25
+obstacles:
+  single: 25
 
-  clock:
-    ticks: 10
+clock:
+  ticks: 10
