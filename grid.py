@@ -34,3 +34,5 @@ class Grid:
     def single_obstacles(self):
         for i in range(config.single_obstacle_count()):
             self.grid[randint(0, config.grid_height()-1)][randint(0, config.grid_width()-1)] = GridCell(OccupantType.OBSTACLE)
+
+singleton_grid = Grid()

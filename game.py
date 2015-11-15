@@ -1,5 +1,5 @@
 import pygame
-from grid import Grid
+import grid
 import config
 
 pygame.init()
@@ -8,7 +8,7 @@ clock = pygame.time.Clock()
 
 done = False
 
-game_grid = Grid().grid
+game_grid = grid.singleton_grid
 
 screen = pygame.display.set_mode((len(game_grid)*config.cell_pixel_height(), len(game_grid[0])*config.cell_pixel_width()))
 
