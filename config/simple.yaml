@@ -8,3 +8,6 @@ config:
 
   obstacles:
     single: 25
+
+  clock:
+    ticks: 10

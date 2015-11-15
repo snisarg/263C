@@ -30,5 +30,5 @@ while not done:
                               config.cell_pixel_height(), config.cell_pixel_width()))
 
     pygame.display.flip()
-    clock.tick(10)
+    clock.tick(config.render_refresh_clock_ticks())
 pygame.quit()

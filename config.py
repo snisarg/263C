@@ -24,3 +24,7 @@ def cell_pixel_height():
 def single_obstacle_count():
     return config_map['config']['obstacles']['single']
 
+
+def render_refresh_clock_ticks():
+    return int(config_map['config']['clock']['ticks'])
+
