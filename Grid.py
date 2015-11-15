@@ -8,8 +8,8 @@ class OccupantType:
     PREDATOR = 2
     PREY_EASY = 3
     PREY_HARD = 4
-    COLOUR_MAP = {EMPTY: (0, 0, 0),
-                  OBSTACLE: (255, 255, 255),
+    COLOUR_MAP = {EMPTY: (240, 240, 240),
+                  OBSTACLE: (10, 10, 10),
                   PREDATOR: (255, 0, 0),
                   PREY_EASY: (0, 127, 0),
                   PREY_HARD: (0, 255, 0)}
@@ -31,8 +31,8 @@ class Grid:
         self.grid = [[GridCell(OccupantType.COLOUR_MAP) for i in range(GRID_WIDTH_MAX)] for i in range(GRID_HEIGHT_MAX)]
 
     def print_grid(self):
-        for i in range(0, GRID_HEIGHT_MAX):
-            for j in range(0, GRID_WIDTH_MAX):
+        for i in range(len(self.grid)):
+            for j in range(len(self.grid[i])):
                 print self.grid[i][j].get_colour()
             print '\n'
 
