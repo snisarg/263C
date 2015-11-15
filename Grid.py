@@ -1,6 +1,7 @@
 GRID_WIDTH_MAX = 10
 GRID_HEIGHT_MAX = 10
 
+
 class OccupantType:
     EMPTY = 0
     OBSTACLE = 1
@@ -13,6 +14,7 @@ class OccupantType:
                   PREY_EASY: (0, 127, 0),
                   PREY_HARD: (0, 255, 0)}
 
+
 class GridCell:
 
     def __init__(self, colour_map):
@@ -21,6 +23,7 @@ class GridCell:
 
     def get_colour(self):
         return self.colour_map[self.occupants[0]]
+
 
 class Grid:
 
