@@ -1,8 +1,6 @@
 import pygame
 from Grid import Grid
-
-CELL_HEIGHT = 25
-CELL_WIDTH = 25
+import config
 
 pygame.init()
 pygame.display.set_caption('Predators attack!')
@@ -12,7 +10,7 @@ done = False
 
 game_grid = Grid().grid
 
-screen = pygame.display.set_mode((len(game_grid)*CELL_HEIGHT, len(game_grid[0])*CELL_WIDTH))
+screen = pygame.display.set_mode((len(game_grid)*config.cell_pixel_height(), len(game_grid[0])*config.cell_pixel_width()))
 
 while not done:
     # --- Main event loop
@@ -28,7 +26,8 @@ while not done:
     for rows in range(len(game_grid)):
         for columns in range(len(game_grid[rows])):
             pygame.draw.rect(screen, game_grid[rows][columns].get_colour(),
-                             (rows*CELL_HEIGHT, columns*CELL_WIDTH, CELL_HEIGHT, CELL_WIDTH))
+                             (rows*config.cell_pixel_height(), columns*config.cell_pixel_width(),
+                              config.cell_pixel_height(), config.cell_pixel_width()))
 
     pygame.display.flip()
     clock.tick(10)

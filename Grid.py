@@ -1,7 +1,5 @@
 from random import randint
-
-GRID_WIDTH_MAX = 10
-GRID_HEIGHT_MAX = 10
+import config
 
 
 class OccupantType:
@@ -30,9 +28,9 @@ class GridCell:
 class Grid:
 
     def __init__(self):
-        self.grid = [[GridCell(OccupantType.EMPTY) for i in range(GRID_WIDTH_MAX)] for i in range(GRID_HEIGHT_MAX)]
+        self.grid = [[GridCell(OccupantType.EMPTY) for i in range(config.grid_width())] for i in range(config.grid_height())]
         self.single_obstacles()
 
     def single_obstacles(self):
-        for i in range(11):
-            self.grid[randint(0, GRID_HEIGHT_MAX-1)][randint(0, GRID_WIDTH_MAX-1)] = GridCell(OccupantType.OBSTACLE)
+        for i in range(config.single_obstacle_count()):
+            self.grid[randint(0, config.grid_height()-1)][randint(0, config.grid_width()-1)] = GridCell(OccupantType.OBSTACLE)

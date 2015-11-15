@@ -1,0 +1,10 @@
+config:
+  grid:
+    width: 25
+    height: 25
+    cell:
+      width: 25
+      height: 25
+
+  obstacles:
+    single: 25
