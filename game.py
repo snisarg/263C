@@ -1,5 +1,5 @@
 import pygame
-from Grid import Grid
+from grid import Grid
 import config
 
 pygame.init()
