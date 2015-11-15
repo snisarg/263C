@@ -1,3 +1,5 @@
+from random import randint
+
 GRID_WIDTH_MAX = 10
 GRID_HEIGHT_MAX = 10
 
@@ -17,9 +19,9 @@ class OccupantType:
 
 class GridCell:
 
-    def __init__(self, colour_map):
-        self.colour_map = colour_map
-        self.occupants = [OccupantType.EMPTY]
+    def __init__(self, type):
+        self.colour_map = OccupantType.COLOUR_MAP
+        self.occupants = [type]
 
     def get_colour(self):
         return self.colour_map[self.occupants[0]]
@@ -28,13 +30,9 @@ class GridCell:
 class Grid:
 
     def __init__(self):
-        self.grid = [[GridCell(OccupantType.COLOUR_MAP) for i in range(GRID_WIDTH_MAX)] for i in range(GRID_HEIGHT_MAX)]
+        self.grid = [[GridCell(OccupantType.EMPTY) for i in range(GRID_WIDTH_MAX)] for i in range(GRID_HEIGHT_MAX)]
+        self.single_obstacles()
 
-    def print_grid(self):
-        for i in range(len(self.grid)):
-            for j in range(len(self.grid[i])):
-                print self.grid[i][j].get_colour()
-            print '\n'
-
-x = Grid()
-x.print_grid()
+    def single_obstacles(self):
+        for i in range(11):
+            self.grid[randint(0, GRID_HEIGHT_MAX-1)][randint(0, GRID_WIDTH_MAX-1)] = GridCell(OccupantType.OBSTACLE)

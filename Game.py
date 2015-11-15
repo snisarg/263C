@@ -5,7 +5,7 @@ CELL_HEIGHT = 25
 CELL_WIDTH = 25
 
 pygame.init()
-pygame.display.set_caption('My game!')
+pygame.display.set_caption('Predators attack!')
 clock = pygame.time.Clock()
 
 done = False
@@ -19,15 +19,17 @@ while not done:
     for event in pygame.event.get(): # User did something
         if event.type == pygame.QUIT: # If user clicked close
             done = True  # Flag that we are done so we exit this loop
+            continue
 
-    screen.fill((240, 240, 240))
+    # Move animats
+    # Process positions
+
+    # screen.fill((240, 240, 240))
     for rows in range(len(game_grid)):
         for columns in range(len(game_grid[rows])):
             pygame.draw.rect(screen, game_grid[rows][columns].get_colour(),
                              (rows*CELL_HEIGHT, columns*CELL_WIDTH, CELL_HEIGHT, CELL_WIDTH))
 
     pygame.display.flip()
-
     clock.tick(10)
-
 pygame.quit()
