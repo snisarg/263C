@@ -7,23 +7,26 @@ class state:
     PreyBothVisible = 3
     Hungry = 4          #If energy below threshold
     NotHungry = 5       #If energy above threshold
-    PreyClose = 6       #Prey close enough to be eaten
-    PredatorHelp = 7    #If Coordination is needed
+    PreyEClose = 6       #Prey close enough to be eaten
+    PreyHClose = 7
+    PredatorHelp = 8    #If Coordination is needed
 
-    #Number of states = 8
+    #Number of states = 9
 
 class action:
     MoveRandomly = 0        #If chosen, move randomly
     TowardsEasyPrey = 1     #If chosen, then make animat move towards easy prey in the environment.
+
     TowardsHardPrey = 2     #If chosen, then make animat move towards hard prey in the environment.
     TowardsSignal = 3       #If chosen, move animat towards signal for help
-    EatPrey = 4             #If chosen, eat prey
-    SignalHelp = 5          #If chosen, then make animat signal for help
+    EatEPrey = 4             #If chosen, eat prey
+    EatHPrey = 5
+    SignalHelp = 6          #If chosen, then make animat signal for help
 
-    #Number of actions = 6
+    #Number of actions = 7
 
 
-#### Future replacement for Table entries
+#--- Future replacement for Table entries
 class actionValue:
 
     def __init__(self,x,y):
@@ -45,7 +48,7 @@ class QLearning:
         self.gamma = gamma
         self.settable()
 
-#### Initialise Q-table
+#--- Initialise Q-table
     # Key is a list of states
     # Value is a list of actions followed by their q-values
     def settable(self):
@@ -58,23 +61,24 @@ class QLearning:
         self.table[(state.PreyEasyVisible, state.NotHungry)] = [action.MoveRandomly, self.rand()]
         self.table[(state.PreyEasyVisible, state.PreyHardVisible, state.Hungry)] = [action.TowardsEasyPrey,self.rand(),
                                     action.TowardsHardPrey,self.rand(),action.SignalHelp,self.rand()]
-        self.table[state.PreyClose] = [action.EatPrey, self.rand()]
+        self.table[state.PreyEClose] = [action.EatEPrey, self.rand()]
+        self.table[state.PreyHClose] = [action.EatHPrey, self.rand()]
         self.table[state.PredatorHelp] = [action.MoveRandomly, self.rand() , action.TowardsSignal, self.rand()]
 
 
 
-##### Choose Action with max Q value
+#--- Choose Action with max Q value
     def chooseaction(self,current_state):
-        current_action = None
-        if self.table.has_key(self,current_state):
-            current_action = self.table.get(self,current_state,default=None)
+        if self.table.has_key(current_state):
+            current_action = self.table.get(current_state,default=None)
         else:
             print "Unrecognised state!"
             return None
 
         #Iterating through current action and finding action with max value
         maxqvalue = -1
-        for index in range(len(current_action))-1 :
+        maxindex = 0
+        for index in range(len(current_action)-1) :
             if maxqvalue < current_action[index+1] :
                 maxindex = index
                 maxqvalue = current_action[index+1]
@@ -87,8 +91,8 @@ class QLearning:
 
 
 
-#### Perform Q Learning
-    def QLearning(self,reward,state):
+#--- Perform Q Learning
+    def doQLearning(self,reward,state):
 
         # Retrieve previous row of actions for previous state
         prev_action_row = self.table.get(self.prev_state,default = None)
@@ -101,13 +105,13 @@ class QLearning:
         newq = newqtemp[1]  # Newq contains best weight
 
         # Qlearning
-        newq = self.alpha*(reward+(self.gamma * self.newq)-oldq)  #Calculate newQ
+        newq = self.alpha*(reward+(self.gamma * newq)-oldq)  #Calculate newQ
 
         #Update QValue and reflect in Table
         prev_action_row[self.prev_maxindex] = newq
         self.table[self.prev_state] = prev_action_row
 
 
-#### Return Random weight from 0 to 1
+#--- Return Random weight from 0 to 1
     def rand(self):
         return random.uniform(0.0,1.0)

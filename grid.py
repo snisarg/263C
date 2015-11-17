@@ -8,7 +8,7 @@ class OccupantType:
     PREDATOR = 2
     PREY_EASY = 3
     PREY_HARD = 4
-    COLOUR_MAP = {EMPTY: (240, 240, 240),
+    COLOUR_MAP = {EMPTY: (240, 240, 240),   #RGB values
                   OBSTACLE: (10, 10, 10),
                   PREDATOR: (255, 0, 0),
                   PREY_EASY: (0, 127, 0),
