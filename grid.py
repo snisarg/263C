@@ -29,7 +29,7 @@ class Grid:
 
     def __init__(self):
         self.grid = [[GridCell(OccupantType.EMPTY) for i in range(config.grid_width())] for i in range(config.grid_height())]
-        self.single_obstacles()
+        #self.single_obstacles()
 
     def single_obstacles(self):
         for i in range(config.single_obstacle_count()):

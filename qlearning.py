@@ -16,7 +16,6 @@ class state:
 class action:
     MoveRandomly = 0        # If chosen, move randomly
     TowardsEasyPrey = 1     # If chosen, then make animat move towards easy prey in the environment.
-
     TowardsHardPrey = 2     # If chosen, then make animat move towards hard prey in the environment.
     TowardsSignal = 3       # If chosen, move animat towards signal for help
     EatEPrey = 4             # If chosen, eat prey
@@ -59,11 +58,13 @@ class QLearning:
         self.table[(state.PreyHardVisible, state.NotHungry)] = [action.MoveRandomly, self.rand()]
         self.table[(state.PreyEasyVisible, state.NotHungry)] = [action.MoveRandomly, self.rand()]
         self.table[(state.PreyEasyVisible, state.PreyHardVisible, state.Hungry)] = [action.TowardsEasyPrey,self.rand(),
-                                    action.TowardsHardPrey,self.rand(),action.SignalHelp,self.rand()]
-        self.table[state.PreyEClose] = [action.EatEPrey, self.rand()]
-        self.table[state.PreyHClose] = [action.EatHPrey, self.rand()]
+                                    action.TowardsHardPrey,self.rand()]
+        self.table[(state.PreyEasyVisible, state.PreyHardVisible, state.NotHungry)] = [action.MoveRandomly, self.rand()]
+        self.table[(state.PreyEClose, state.Hungry)] = [action.EatEPrey, self.rand()]
+        self.table[(state.PreyEClose, state.NotHungry)] = [action.MoveRandomly, self.rand()]
+        self.table[(state.PreyHClose, state.Hungry)] = [action.EatHPrey, self.rand()]
+        self.table[(state.PreyHClose, state.NotHungry)] = [action.MoveRandomly, self.rand()]
         self.table[state.PredatorHelp] = [action.MoveRandomly, self.rand() , action.TowardsSignal, self.rand()]
-
 
 
 # --- Choose Action with max Q value
@@ -74,13 +75,18 @@ class QLearning:
         else:
             current_action = self.table.get(tuple(current_state))
 
+        # print "State " , current_state
+        # print "Action " , current_action
+
+
         if current_action == None:
             # print "Unexpected state! " , current_state
             return
         # Iterating through current action and finding action with max value
         maxqvalue = -1
         maxindex = 0
-        for index in range(len(current_action)-1) :
+        index = 0
+        while index < len(current_action)-1 :
             if maxqvalue < current_action[index+1] :
                 maxindex = index
                 maxqvalue = current_action[index+1]
@@ -89,7 +95,7 @@ class QLearning:
         self.prev_maxindex = maxindex
 
         # Return best action and it's q weight
-        return current_action[maxindex - 1], current_action[maxindex]
+        return (current_action[maxindex], current_action[maxindex+1])
 
 
 
@@ -104,7 +110,7 @@ class QLearning:
 
 
         # Find Qt-1
-        oldq = prev_action_row[self.prev_maxindex]  # prev_maxindex remembers where the previous Q value
+        oldq = prev_action_row[self.prev_maxindex-1]  # prev_maxindex remembers where the previous Q value
 
         # Find Qt
         newqtemp = self.chooseaction(state)    # Contains best action and it's weight
@@ -113,8 +119,9 @@ class QLearning:
         # Qlearning
         newq = self.alpha*(reward+(self.gamma * newq)-oldq)  # Calculate newQ
 
+        # print "Updated Q value " , oldq , newq
         # Update QValue and reflect in Table
-        prev_action_row[self.prev_maxindex] = newq
+        prev_action_row[self.prev_maxindex-1] = newq
         self.table[tuple(self.prev_state)] = prev_action_row
 
 
