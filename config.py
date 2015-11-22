@@ -1,6 +1,6 @@
 import yaml
 
-config_file = open('/Users/suketsharma/Desktop/College/Animats/Project/263C/config/simple.yaml')
+config_file = open('config/simple.yaml')
 config_map = yaml.safe_load(config_file)
 config_file.close()
 
@@ -10,7 +10,7 @@ def grid_width():
 
 
 def grid_height():
-    return config_map['grid']['width']
+    return config_map['grid']['height']
 
 
 def cell_pixel_width():
