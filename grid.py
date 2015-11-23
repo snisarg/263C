@@ -21,10 +21,13 @@ class GridCell:
 
     def __init__(self, occupant_type):
         self.colour_map = OccupantType.COLOUR_MAP
-        self.occupants = [occupant_type]
+        self.floor = occupant_type                  # Can be grass, obstacle or nothing
+        self.occupants = []                         # What animats are in the cell
 
     def get_colour(self):
-        return self.colour_map[self.occupants[0]]
+        if len(self.occupants)>0:
+            return self.colour_map[self.occupants[0]]
+        return self.colour_map[self.floor]
 
 
 class Grid:
@@ -37,10 +40,10 @@ class Grid:
     def set_single_obstacles(self):
         for i in range(config.single_obstacle_count()):
             coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
-            self.set_at_position(coord, OccupantType.OBSTACLE)
+            self.set_floor(coord, OccupantType.OBSTACLE)
 
     def is_obstacle(self, coord):
-        if OccupantType.OBSTACLE in self.grid[coord[0]][coord[1]].occupants:
+        if OccupantType.OBSTACLE == self.grid[coord[0]][coord[1]].floor:
             return True;
         return False
 
@@ -48,11 +51,10 @@ class Grid:
         for i in range(config.grass_count()):
             coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
             if not self.is_obstacle(coord):
-                self.set_at_position(coord, OccupantType.GRASS)
+                self.set_floor(coord, OccupantType.GRASS)
 
-    def set_at_position(self, coord, occupant):
-        self.grid[coord[0]][coord[1]].occupants.append(occupant)
-        self.remove_from_position(coord, OccupantType.EMPTY)
+    def set_floor(self, coord, occupant):
+        self.grid[coord[0]][coord[1]].floor = occupant
 
     def remove_from_position(self, coord, occupant):
         if occupant in self.grid[coord[0]][coord[1]].occupants:
