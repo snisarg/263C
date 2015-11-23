@@ -9,4 +9,13 @@ obstacles:
   single: 25
 
 clock:
-  ticks: 20
+  ticks: 10
+
+animats:
+  count:
+    easy_prey: 5
+    hard_prey: 5
+    predator: 3
+
+
+

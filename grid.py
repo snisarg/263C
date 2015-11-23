@@ -17,9 +17,9 @@ class OccupantType:
 
 class GridCell:
 
-    def __init__(self, type):
+    def __init__(self, occupant_type):
         self.colour_map = OccupantType.COLOUR_MAP
-        self.occupants = [type]
+        self.occupants = [occupant_type]
 
     def get_colour(self):
         return self.colour_map[self.occupants[0]]
