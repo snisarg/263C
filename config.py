@@ -1,6 +1,7 @@
 import yaml
+import os
 
-config_file = open('/Users/suketsharma/Desktop/College/Animats/Project/263C/config/simple.yaml')
+config_file = open(os.path.dirname(__file__)+('/config/simple.yaml'))
 config_map = yaml.safe_load(config_file)
 config_file.close()
 
