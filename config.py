@@ -41,3 +41,7 @@ def animats_easy_prey_count():
 def animats_hard_prey_count():
     return int(config_map['animats']['count']['hard_prey'])
 
+
+def grass_count():
+    return int(config_map['grass'])
+

@@ -8,6 +8,8 @@ grid:
 obstacles:
   single: 25
 
+grass: 800
+
 clock:
   ticks: 10
 
