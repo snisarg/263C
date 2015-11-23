@@ -28,3 +28,15 @@ def single_obstacle_count():
 def render_refresh_clock_ticks():
     return int(config_map['clock']['ticks'])
 
+
+def animats_predator_count():
+    return int(config_map['animats']['count']['predator'])
+
+
+def animats_easy_prey_count():
+    return int(config_map['animats']['count']['easy_prey'])
+
+
+def animats_hard_prey_count():
+    return int(config_map['animats']['count']['hard_prey'])
+
