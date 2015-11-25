@@ -1,4 +1,4 @@
-from Animat import *
+from animat import *
 from grid import *
 from qlearning import *
 import numpy

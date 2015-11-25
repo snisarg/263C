@@ -1,6 +1,6 @@
 from random import randint
 import config
-import Animat
+import animat
 
 
 class OccupantType:
@@ -10,11 +10,11 @@ class OccupantType:
     PREY_EASY = 3
     PREY_HARD = 4
     GRASS = 5
-    COLOUR_MAP = {EMPTY: (240, 240, 240),   #RGB values
+    COLOUR_MAP = {EMPTY: (240, 240, 240),  #RGB values
                   OBSTACLE: (10, 10, 10),
-                  Animat.Predator: (255, 0, 0),
-                  Animat.EPrey: (0, 127, 0),
-                  Animat.HPrey: (0, 255, 0),
+                  animat.Predator: (255, 0, 0),
+                  animat.EPrey: (0, 127, 0),
+                  animat.HPrey: (0, 255, 0),
                   GRASS: (242, 255, 242)}
 
 
@@ -83,7 +83,7 @@ class World:
         for i in range(config.animats_easy_prey_count()):
             coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
             if not self.grid.is_obstacle(coord):
-                prey = Animat.EPrey(coord[0], coord[1])
+                prey = animat.EPrey(coord[0], coord[1])
                 self.easy_preys.append(prey)
                 self.grid.add_to_position(coord, prey)
 
@@ -91,7 +91,7 @@ class World:
         for i in range(config.animats_easy_prey_count()):
             coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
             if not self.grid.is_obstacle(coord):
-                prey = Animat.HPrey(coord[0], coord[1])
+                prey = animat.HPrey(coord[0], coord[1])
                 self.easy_preys.append(prey)
                 self.grid.add_to_position(coord, prey)
 
@@ -99,6 +99,6 @@ class World:
         for i in range(config.animats_easy_prey_count()):
             coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
             if not self.grid.is_obstacle(coord):
-                predator = Animat.Predator(coord[0], coord[1])
+                predator = animat.Predator(coord[0], coord[1])
                 self.easy_preys.append(predator)
                 self.grid.add_to_position(coord, predator)
