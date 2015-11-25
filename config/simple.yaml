@@ -18,6 +18,10 @@ animats:
     easy_prey: 5
     hard_prey: 5
     predator: 3
+  range:
+    easy_prey: 5
+    hard_prey: 5
+    predator: 5
 
 
 
