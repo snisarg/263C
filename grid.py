@@ -78,6 +78,7 @@ class World:
         self.easy_preys = []
         self.hard_preys = []
         self.predators = []
+        self.clock = 0
         self.__init_easy_prey()
         self.__init_hard_prey()
         self.__init_predator()
@@ -124,15 +125,16 @@ class World:
     def tick(self):
         # Pick the next step
         for easy in self.easy_preys:
-            easy.move()
+            easy.move(self.clock)
         for hard in self.hard_preys:
             hard.move()
         for predator in self.predators:
-            predator.move()
+            predator.move(self.clock)
         # Process the movement and results
         # Right now only Predators can take actions of their movement.
         for predator in self.predators:
-            predator.act()
+            predator.act(self.clock)
+        ++self.clock  # increment timer.
 
 
 singleton_grid = Grid()

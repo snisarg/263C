@@ -38,7 +38,12 @@ class EPrey(Animat):
         self.being_chased_x = -1
         self.being_chased_y = -1
 
-    def move(self):
+    def move(self, game_clock):
+        if game_clock % config.easy_prey_range() + 1 == 0:
+            return
+        # Check where the predators are, run in the opposite direction
+
+        # Nothing in site, random walk.
         coord = random_walk()
         while grid.singleton_grid.is_obstacle(coord):
             coord = random_walk()
@@ -104,7 +109,9 @@ class HPrey(Animat):
         self.being_chased_x = -1
         self.being_chased_y = -1
 
-    def move(self):
+    def move(self, game_clock):
+        if game_clock % config.easy_prey_range() + 1 == 0:
+            return
         coord = random_walk()
         while grid.singleton_grid.is_obstacle(coord):
             coord = random_walk()
@@ -168,7 +175,9 @@ class Predator(Animat):
         self.killed = False
         self.length = 0
 
-    def move(self):
+    def move(self, game_clock):
+        if game_clock % config.easy_prey_range() + 1 == 0:
+            return
         coord = random_walk()
         while grid.singleton_grid.is_obstacle(coord):
             coord = random_walk()
