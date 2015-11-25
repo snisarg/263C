@@ -4,6 +4,10 @@ import config
 import grid
 
 
+def random_walk():
+    return [random.randint(-1, 1), random.randint(-1, 1)]
+
+
 class Animat:
 
     def __init__(self):
@@ -21,10 +25,11 @@ class Animat:
 # --- Easy Prey class def
 class EPrey(Animat):
 
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         Animat.__init__(self)
         self.position_x = x
         self.position_y = y
+        self.position = [x, y]
         self.energy = 400
 
         # Set to true prey dies
@@ -33,8 +38,13 @@ class EPrey(Animat):
         self.being_chased_x = -1
         self.being_chased_y = -1
 
-    def update_position(self,predators,markposition):
+    def move(self):
+        coord = random_walk()
+        while grid.singleton_grid.is_obstacle(coord):
+            coord = random_walk()
+        grid.singleton_world.move_animat(self, coord)
 
+    def update_position(self,predators,markposition):
         oldx = self.position_x
         oldy = self.position_y
         # Mark your old spot as empty
@@ -86,12 +96,19 @@ class HPrey(Animat):
         Animat.__init__(self)
         self.position_x = x
         self.position_y = y
+        self.position = [x, y]
         self.energy = 400
         # Set to true prey dies
         self.killed = False
         # Coordinates of the predator are set
         self.being_chased_x = -1
         self.being_chased_y = -1
+
+    def move(self):
+        coord = random_walk()
+        while grid.singleton_grid.is_obstacle(coord):
+            coord = random_walk()
+        grid.singleton_world.move_animat(self, coord)
 
     def update_position(self, predators,markposition):
         oldx = self.position_x
@@ -141,6 +158,7 @@ class Predator(Animat):
         Animat.__init__(self)
         self.position_x = x
         self.position_y = y
+        self.position = [x, y]
         self.energy = 1000
         self.hunger_threshold = 900
         self.eprey_x = -1
@@ -149,6 +167,15 @@ class Predator(Animat):
         self.hprey_y = -1
         self.killed = False
         self.length = 0
+
+    def move(self):
+        coord = random_walk()
+        while grid.singleton_grid.is_obstacle(coord):
+            coord = random_walk()
+        grid.singleton_world.move_animat(self, coord)
+
+    def act(self):
+        pass
 
 # -- Sets to true when easy or hard prey is in sight (occupant = hard/easy)
     def prey_in_sight(self, occupant, mark_position):
