@@ -57,3 +57,15 @@ def hard_prey_range():
 def predator_range():
     return int(config_map['animats']['range']['predator'])
 
+
+def easy_prey_speed():
+    return int(config_map['animats']['speed']['easy_prey'])
+
+
+def hard_prey_speed():
+    return int(config_map['animats']['speed']['hard_prey'])
+
+
+def predator_speed():
+    return int(config_map['animats']['speed']['predator'])
+
