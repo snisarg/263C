@@ -1,5 +1,6 @@
 from random import randint
 import config
+import Animat
 
 
 class OccupantType:
@@ -11,10 +12,10 @@ class OccupantType:
     GRASS = 5
     COLOUR_MAP = {EMPTY: (240, 240, 240),   #RGB values
                   OBSTACLE: (10, 10, 10),
-                  PREDATOR: (255, 0, 0),
-                  PREY_EASY: (0, 127, 0),
-                  PREY_HARD: (0, 255, 0),
-                  GRASS: (150, 250, 150)}
+                  Animat.Predator: (255, 0, 0),
+                  Animat.EPrey: (0, 127, 0),
+                  Animat.HPrey: (0, 255, 0),
+                  GRASS: (242, 255, 242)}
 
 
 class GridCell:
@@ -25,8 +26,8 @@ class GridCell:
         self.occupants = []                         # What animats are in the cell
 
     def get_colour(self):
-        if len(self.occupants)>0:
-            return self.colour_map[self.occupants[0]]
+        if len(self.occupants) > 0:
+            return self.colour_map[self.occupants[0].__class__]
         return self.colour_map[self.floor]
 
 
@@ -60,4 +61,44 @@ class Grid:
         if occupant in self.grid[coord[0]][coord[1]].occupants:
             self.grid[coord[0]][coord[1]].occupants.remove(occupant)
 
-singleton_grid = Grid().grid
+    def add_to_position(self, coord, occupant):
+        self.grid[coord[0]][coord[1]].occupants.append(occupant)
+
+
+singleton_grid = Grid()
+
+
+class World:
+
+    def __init__(self, position_grid):
+        self.grid = position_grid
+        self.easy_preys = []
+        self.hard_preys = []
+        self.predators = []
+        self.init_easy_prey()
+        self.init_hard_prey()
+        self.init_predator()
+
+    def init_easy_prey(self):
+        for i in range(config.animats_easy_prey_count()):
+            coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
+            if not self.grid.is_obstacle(coord):
+                prey = Animat.EPrey(coord[0], coord[1])
+                self.easy_preys.append(prey)
+                self.grid.add_to_position(coord, prey)
+
+    def init_hard_prey(self):
+        for i in range(config.animats_easy_prey_count()):
+            coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
+            if not self.grid.is_obstacle(coord):
+                prey = Animat.HPrey(coord[0], coord[1])
+                self.easy_preys.append(prey)
+                self.grid.add_to_position(coord, prey)
+
+    def init_predator(self):
+        for i in range(config.animats_easy_prey_count()):
+            coord = (randint(0, config.grid_height()-1), randint(0, config.grid_width()-1))
+            if not self.grid.is_obstacle(coord):
+                predator = Animat.Predator(coord[0], coord[1])
+                self.easy_preys.append(predator)
+                self.grid.add_to_position(coord, predator)

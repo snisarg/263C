@@ -1,7 +1,7 @@
 import random
 from qlearning import QLearning
 import config
-from grid import OccupantType
+import grid
 
 
 class Animat:
@@ -38,7 +38,7 @@ class EPrey(Animat):
         oldx = self.position_x
         oldy = self.position_y
         # Mark your old spot as empty
-        markposition[oldx][oldy]=OccupantType.EMPTY
+        markposition[oldx][oldy]=grid.OccupantType.EMPTY
 
         # If not being chased, find new spot randomly
         if self.being_chased_x == -1:
@@ -48,7 +48,7 @@ class EPrey(Animat):
                 self.position_y += self.randomjump([1,0,-1])
                 self.modulus_movement()
                 # To ensure you choose only empty spot (No collision)
-                if markposition[self.position_x][self.position_y] == OccupantType.EMPTY:
+                if markposition[self.position_x][self.position_y] == grid.OccupantType.EMPTY:
                     flag = False
 
         # You are being chased, evade!
@@ -71,7 +71,7 @@ class EPrey(Animat):
                     x.eprey_y = self.position_y
 
         # Mark your new position
-        markposition[self.position_x][self.position_y]=OccupantType.PREY_EASY
+        markposition[self.position_x][self.position_y]=grid.OccupantType.PREY_EASY
 
         # If the predator is far behind, forget him
         if abs(self.position_x - self.being_chased_x) > 8 and abs(self.position_y - self.being_chased_y) > 8:
@@ -97,7 +97,7 @@ class HPrey(Animat):
         oldx = self.position_x
         oldy = self.position_y
         # Mark your old spot as empty
-        markposition[oldx][oldy]=OccupantType.EMPTY
+        markposition[oldx][oldy]=grid.OccupantType.EMPTY
 
         # If not being chased, find new spot randomly
         if self.being_chased_x == -1:
@@ -106,7 +106,7 @@ class HPrey(Animat):
                 self.position_x += self.randomjump([1,0,-1])
                 self.position_y += self.randomjump([1,0,-1])
                 self.modulus_movement()
-                if markposition[self.position_x][self.position_y] == OccupantType.EMPTY:
+                if markposition[self.position_x][self.position_y] == grid.OccupantType.EMPTY:
                     flag = False
 
         # You are being chased, evade!
@@ -127,7 +127,7 @@ class HPrey(Animat):
                 if x.hprey_x == oldx and x.hprey_y == oldy:
                     x.hprey_x = self.position_x % config.grid_width()
                     x.hprey_y = self.position_y % config.grid_height()
-        markposition[self.position_x][self.position_y]=OccupantType.PREY_HARD
+        markposition[self.position_x][self.position_y]=grid.OccupantType.PREY_HARD
 
         # If the predator is far behind, forget him
         if abs(self.position_x - self.being_chased_x) > 8 and abs(self.position_y - self.being_chased_y) > 8:
@@ -169,20 +169,20 @@ class Predator(Animat):
 
         # Something is in sight
         if min_distance < width*height:
-            if occupant == OccupantType.PREY_EASY and prey_x != -1:
+            if occupant == grid.OccupantType.PREY_EASY and prey_x != -1:
                 self.eprey_x = prey_x
                 self.eprey_y = prey_y
-            elif occupant == OccupantType.PREY_HARD and prey_x != -1:
+            elif occupant == grid.OccupantType.PREY_HARD and prey_x != -1:
                 self.hprey_x = prey_x
                 self.hprey_y = prey_y
             return True
 
         # No Animat in sight
         else:
-            if occupant == OccupantType.PREY_EASY:
+            if occupant == grid.OccupantType.PREY_EASY:
                 self.eprey_x = -1
                 self.eprey_y = -1
-            elif occupant == OccupantType.PREY_HARD:
+            elif occupant == grid.OccupantType.PREY_HARD:
                 self.hprey_x = -1
                 self.hprey_y = -1
             return False
@@ -191,7 +191,7 @@ class Predator(Animat):
     def prey_close(self, occupant, mark_position):
         width = config.grid_width()
         height = config.grid_height()
-        if occupant == OccupantType.PREY_EASY:
+        if occupant == grid.OccupantType.PREY_EASY:
             for i in range((self.position_x - 1) , (self.position_x + 1)):
                  for j in range((self.position_y - 1), (self.position_y + 1)):
                      if i % width == self.eprey_x and j % height == self.eprey_y:
@@ -209,11 +209,11 @@ class Predator(Animat):
 
 # -- Walk randomly
     def update_position(self,markposition):
-            markposition[self.position_x][self.position_y]=OccupantType.EMPTY
+            markposition[self.position_x][self.position_y]=grid.OccupantType.EMPTY
             self.position_x += self.randomjump([1, -1])
             self.position_y += self.randomjump([1, -1])
             self.modulus_movement()
-            markposition[self.position_x][self.position_y]=OccupantType.PREDATOR
+            markposition[self.position_x][self.position_y]=grid.OccupantType.PREDATOR
 
 
 # -- Go towards easy prey
@@ -223,7 +223,7 @@ class Predator(Animat):
             height = config.grid_height()
 
             # Mark Previous position as empty
-            markposition[self.position_x][self.position_y] = OccupantType.EMPTY
+            markposition[self.position_x][self.position_y] = grid.OccupantType.EMPTY
 
             # Find Best step to take
             step = 1
@@ -249,7 +249,7 @@ class Predator(Animat):
                 self.eprey_y = -1
 
             # Mark your new spot as occupied
-            markposition[self.position_x][self.position_y] = OccupantType.PREDATOR
+            markposition[self.position_x][self.position_y] = grid.OccupantType.PREDATOR
 
             # If you need to know how long the chase has gone on
             self.length += 1
@@ -261,7 +261,7 @@ class Predator(Animat):
             height = config.grid_height()
 
             # Mark Previous position as empty
-            markposition[self.position_x][self.position_y]=OccupantType.EMPTY
+            markposition[self.position_x][self.position_y]=grid.OccupantType.EMPTY
 
             # Find Best step to take
             step = 1
@@ -287,7 +287,7 @@ class Predator(Animat):
                 self.hprey_y = -1
 
             # Mark your new spot as occupied
-            markposition[self.position_x][self.position_y] = OccupantType.PREDATOR
+            markposition[self.position_x][self.position_y] = grid.OccupantType.PREDATOR
 
             # If you need to know how long the chase has gone on
             self.length += 1
@@ -308,12 +308,12 @@ class Predator(Animat):
                     self.length = 0
 
                     # Make position of predator as that of killed prey
-                    markposition[self.position_x][self.position_y] = OccupantType.EMPTY
+                    markposition[self.position_x][self.position_y] = grid.OccupantType.EMPTY
                     self.position_x = self.eprey_x
                     self.position_y = self.eprey_y
 
                     # Update mark position to predator
-                    markposition[self.eprey_x][self.eprey_y] = OccupantType.PREDATOR
+                    markposition[self.eprey_x][self.eprey_y] = grid.OccupantType.PREDATOR
 
                     # Remove coordinates of prey that predator was chasing
                     self.eprey_x = -1
@@ -335,12 +335,12 @@ class Predator(Animat):
 
 
                     # Make position of predator as that of killed prey
-                    markposition[self.position_x][self.position_y] = OccupantType.EMPTY
+                    markposition[self.position_x][self.position_y] = grid.OccupantType.EMPTY
                     self.position_x = self.hprey_x
                     self.position_y = self.hprey_y
 
                     # Update mark position to predator
-                    markposition[self.hprey_x][self.hprey_y] = OccupantType.PREDATOR
+                    markposition[self.hprey_x][self.hprey_y] = grid.OccupantType.PREDATOR
 
                     # Remove coordinates of prey that predator was chasing
                     self.hprey_x = -1
