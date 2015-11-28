@@ -102,7 +102,7 @@ class World:
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 prey = animat.HPrey(coord[0], coord[1])
-                self.easy_preys.append(prey)
+                self.hard_preys.append(prey)
                 self.grid.add_to_position(coord, prey)
             else:
                 i -= 1
@@ -112,7 +112,7 @@ class World:
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 predator = animat.Predator(coord[0], coord[1])
-                self.easy_preys.append(predator)
+                self.predators.append(predator)
                 self.grid.add_to_position(coord, predator)
             else:
                 i -= 1
@@ -150,18 +150,30 @@ class World:
             ranged_animats.append(single_range)
         return ranged_animats
 
+    def kill(self, animat):
+        self.grid.remove_from_position(animat)
+        if animat in self.easy_preys:
+            self.easy_preys.remove(animat)
+            print "Easy killed at " + str(animat.position)
+        if animat in self.hard_preys:
+            self.hard_preys.remove(animat)
+            print "Hard killed at " + str(animat.position)
+        if animat in self.predators:
+            self.predators.remove(animat)
+            print "Predator died at " + str(animat.position)
+
     def tick(self):
         # Pick the next step
         for easy in self.easy_preys:
             easy.move(self.clock)
         for hard in self.hard_preys:
-            hard.move()
+            hard.move(self.clock)
         for predator in self.predators:
             predator.move(self.clock)
         # Process the movement and results
         # Right now only Predators can take actions of their movement.
         for predator in self.predators:
-            predator.act(self.clock)
+            predator.act()
         self.clock += 1  # increment timer.
 
 

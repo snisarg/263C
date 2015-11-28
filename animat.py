@@ -143,7 +143,7 @@ class EPrey(Animat):
         self.being_chased_y = -1
 
     def move(self, game_clock):
-        if game_clock % config.easy_prey_range() + 1 == 0:
+        if game_clock % (config.easy_prey_speed() + 1) == 0:
             return
         # Check where the predators are, run in the opposite direction
         closest_animats = grid.singleton_world.around_point(self.position, config.easy_prey_range())
@@ -154,7 +154,7 @@ class EPrey(Animat):
                     if isinstance(anim, Predator):
                         # Escaping 0 differences for now because of toroidal diff bug
                         diff = distance_diff(self.position, anim.position, config.easy_prey_range())
-                        print diff
+                        # print diff
                         if not (diff[0] == 0 and diff[1] == 0):
                             step_calc.add(diff)
 
@@ -229,7 +229,7 @@ class HPrey(Animat):
         self.being_chased_y = -1
 
     def move(self, game_clock):
-        if game_clock % config.easy_prey_range() + 1 == 0:
+        if game_clock % (config.hard_prey_speed() + 1) == 0:
             return
         closest_animats = grid.singleton_world.around_point(self.position, config.hard_prey_range())
         step_calc = StepCalculator((10, 6, 4, 2, 1))
@@ -239,7 +239,6 @@ class HPrey(Animat):
                     if isinstance(anim, Predator):
                         # Escaping 0 differences for now because of toroidal diff bug
                         diff = distance_diff(self.position, anim.position, config.hard_prey_range())
-                        print diff
                         if not (diff[0] == 0 and diff[1] == 0):
                             step_calc.add(diff)
 
@@ -320,7 +319,7 @@ class Predator(Animat):
         return None
 
     def move(self, game_clock):
-        if game_clock % config.easy_prey_range() + 1 == 0:
+        if game_clock % (config.predator_speed() + 1) == 0:
             return
         coord = self.__closest_animat()
         if coord is not None:
@@ -333,7 +332,10 @@ class Predator(Animat):
         grid.singleton_world.move_animat(self, coord)
 
     def act(self):
-        pass
+        occupants = grid.singleton_grid.get_occupants_in(self.position)
+        for animat in occupants:
+            if isinstance(animat, EPrey) or isinstance(animat, HPrey):
+                grid.singleton_world.kill(animat)
 
 # -- Sets to true when easy or hard prey is in sight (occupant = hard/easy)
     def prey_in_sight(self, occupant, mark_position):
