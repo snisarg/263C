@@ -17,6 +17,9 @@ class Animat:
     def randomjump(self, list):
             return random.choice(list)
 
+    def modulus_movement(self):
+        self.position_x %= config.grid_width()
+        self.position_y %= config.grid_height()
 
 
 # --- Easy Prey class def
@@ -90,10 +93,6 @@ class EPrey(Animat):
             self.being_chased_x = -1
             self.being_chased_y = -1
 
-    def modulus_movement(self):
-        self.position_x %= config.grid_width()
-        self.position_y %= config.grid_height()
-
 
 # --- This class can be modified to make sure that the harder prey is tougher to catch. (Change speed)
 class HPrey(Animat):
@@ -158,10 +157,6 @@ class HPrey(Animat):
         if abs(self.position_x - self.being_chased_x) > 8 and abs(self.position_y - self.being_chased_y) > 8:
             self.being_chased_x = -1
             self.being_chased_y = -1
-
-    def modulus_movement(self):
-        self.position_x %= config.grid_width()
-        self.position_y %= config.grid_height()
 
 
 class Predator(Animat):
@@ -284,7 +279,6 @@ class Predator(Animat):
                     x.being_chased_x = self.position_x
                     x.being_chased_y = self.position_y
                     flag = True
-
             # The prey you are chasing has been killed
             if not flag:
                 self.eprey_x = -1
@@ -375,6 +369,7 @@ class Predator(Animat):
                     print "Chase lasted ", self.length
                     self.length = 0
 
+
                     # Make position of predator as that of killed prey
                     markposition[self.position_x][self.position_y] = grid.OccupantType.EMPTY
                     self.position_x = self.hprey_x
@@ -387,10 +382,6 @@ class Predator(Animat):
                     self.hprey_x = -1
                     self.hprey_y = -1
 
-    def modulus_movement(self):
-        self.position_x %= config.grid_width()
-        self.position_y %= config.grid_height()
-
 
 # -- Problems to Address
 # 1. Sometimes two or more predators can lock on to a single target. They both update the prey's position x and position y information.
@@ -399,4 +390,3 @@ class Predator(Animat):
 # If energy(hard) > energy(predator) make hard animat survive.
 # 3. Why do they run to the corner so often?
 # 4. Let each prey store a list of predators chasing it. Rather than it's x and y coordinates.
-# 5. Make a predator give up after a threshold. (Currently it's chasing infinitely)
