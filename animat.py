@@ -310,18 +310,23 @@ class Predator(Animat):
         self.killed = False
         self.length = 0
 
+    def __closest_animat(self):
+        closest_animats = grid.singleton_world.around_point(self.position, config.predator_range())
+        for level in closest_animats:
+            for block in level:
+                for anim in block:
+                    if isinstance(anim, EPrey) or isinstance(anim, HPrey):
+                        return anim.position
+        return None
+
     def move(self, game_clock):
         if game_clock % config.easy_prey_range() + 1 == 0:
             return
-        coord = None
-        # closest_animats = grid.singleton_world.around_point(self.position, config.predator_range())
-        # for level in closest_animats:
-        #     for block in level:
-        #         for anim in block:
-        #             if isinstance(anim, EPrey) or isinstance(anim, HPrey):
-        #                 coord = normalise_distance(anim.position, config.predator_range())
-        #                 break
-        if not coord:
+        coord = self.__closest_animat()
+        if coord is not None:
+            coord = normalise_distance(
+                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
+        else:
             coord = random_walk()
             while grid.singleton_grid.is_obstacle(coord):
                 coord = random_walk()
