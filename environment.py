@@ -24,17 +24,15 @@ class Environment:
         # To Remember where animats are - Mark all empty
         self.markposition = numpy.zeros(shape=(self.height,self.width))
         self.markposition.astype(int)
-
         # To Remember where the grass is - Mark all empty
         self.markgrass = numpy.zeros(shape=(self.height,self.width))
         self.markgrass.astype(int)
-
         # Mark Grass
         self.mark_grassy()
-
+        print "Grass has been laid out!"
         # Add all animats to the environment
         self.add_animats()
-
+        print "Animats added!"
         self.main_run()
 
     # Simulate enivronment
@@ -43,9 +41,8 @@ class Environment:
         e_prey_death = 0
         h_prey_death = 0
         clock = 250
-        time.sleep(15)
+
         self.game.init_grid()
-        time.sleep(7)
         while clock > 0:
             for x in self.eprey:
                 if x.killed:
@@ -101,11 +98,9 @@ class Environment:
     def sense_state(self,animat):
         if isinstance(animat,EPrey) or isinstance(animat,HPrey):
             animat.update_position(self.predators,self.markposition)
-
             # If on grass and not being chased , update energy
             if self.markgrass[animat.position_x][animat.position_y] == 1 and animat.being_chased_x == -1:
                 animat.energy +=2
-
             # Kill if low
             if animat.energy <= 0:
                 print "Out of energy!"
@@ -163,6 +158,7 @@ class Environment:
                 x.killed = True
                 return
             else:
+
                 lis = x.qlearn.chooseaction(pred_state) # lis contains best action and it's qvalue
                 # print " State: " , pred_state , " Action " , lis[0]
             if lis[0] == action.MoveRandomly:
