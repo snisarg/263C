@@ -45,7 +45,7 @@ class Grid:
 
     def is_obstacle(self, coord):
         if OccupantType.OBSTACLE == self.grid[coord[0]][coord[1]].floor:
-            return True;
+            return True
         return False
 
     def __set_grass(self):
@@ -95,7 +95,7 @@ class World:
                 self.easy_preys.append(prey)
                 self.grid.add_to_position(coord, prey)
             else:
-                --i
+                i -= 1
 
     def __init_hard_prey(self):
         for i in range(config.animats_easy_prey_count()):
@@ -105,7 +105,7 @@ class World:
                 self.easy_preys.append(prey)
                 self.grid.add_to_position(coord, prey)
             else:
-                --i
+                i -= 1
 
     def __init_predator(self):
         for i in range(config.animats_easy_prey_count()):
@@ -115,7 +115,7 @@ class World:
                 self.easy_preys.append(predator)
                 self.grid.add_to_position(coord, predator)
             else:
-                --i
+                i -= 1
 
     def move_animat(self, animat, new_coord):
         if self.grid.remove_from_position(animat):
@@ -154,7 +154,7 @@ class World:
         # Right now only Predators can take actions of their movement.
         for predator in self.predators:
             predator.act(self.clock)
-        ++self.clock  # increment timer.
+        self.clock += 1  # increment timer.
 
 
 singleton_grid = Grid()
