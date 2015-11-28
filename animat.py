@@ -8,6 +8,7 @@ import math
 def random_walk():
     return [random.randint(-1, 1), random.randint(-1, 1)]
 
+
 # TODO Toroidal differences not accurate.
 def distance_diff(reference, target, vision_range):
     # print (reference, target)
@@ -48,6 +49,21 @@ def distance_diff(reference, target, vision_range):
     return [height * height_multiplier, width * width_multiplier]
 
 
+def normalise_distance(coord, level):
+    # Normalise huge differences to one step for calculations.
+    difference = coord[:]
+    # TODO can be done better.
+    for i in range(level):
+        if difference[0] > 1:
+            difference[0] -= 1
+        elif difference[0] < -1:
+            difference[0] += 1
+        if difference[1] > 1:
+            difference[1] -= 1
+        elif difference[1] < -1:
+            difference[1] += 1
+    return difference
+
 class StepCalculator:
 
     def __init__(self, step_weight):
@@ -69,17 +85,8 @@ class StepCalculator:
         level = int(max(h, w) - 1)
         current_weight = self.weight[int(level)]
 
-        # Normalise huge differences to one step for calculations.
-        # TODO can be done better.
-        for i in range(level):
-            if difference[0] > 1:
-                difference[0] -= 1
-            elif difference[0] < -1:
-                difference[0] += 1
-            if difference[1] > 1:
-                difference[1] -= 1
-            elif difference[1] < -1:
-                difference[1] += 1
+        difference = normalise_distance(difference, level)
+
         # Here, 'difference' represents which direction is the predator coming from
         # Negative weights for origin of predator
         index = self.map[difference[0]][difference[1]]
@@ -306,9 +313,18 @@ class Predator(Animat):
     def move(self, game_clock):
         if game_clock % config.easy_prey_range() + 1 == 0:
             return
-        coord = random_walk()
-        while grid.singleton_grid.is_obstacle(coord):
+        coord = None
+        # closest_animats = grid.singleton_world.around_point(self.position, config.predator_range())
+        # for level in closest_animats:
+        #     for block in level:
+        #         for anim in block:
+        #             if isinstance(anim, EPrey) or isinstance(anim, HPrey):
+        #                 coord = normalise_distance(anim.position, config.predator_range())
+        #                 break
+        if not coord:
             coord = random_walk()
+            while grid.singleton_grid.is_obstacle(coord):
+                coord = random_walk()
         grid.singleton_world.move_animat(self, coord)
 
     def act(self):
