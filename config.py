@@ -30,15 +30,15 @@ def render_refresh_clock_ticks():
     return int(config_map['clock']['ticks'])
 
 
-def animats_predator_count():
+def predator_count():
     return int(config_map['animats']['count']['predator'])
 
 
-def animats_easy_prey_count():
+def easy_prey_count():
     return int(config_map['animats']['count']['easy_prey'])
 
 
-def animats_hard_prey_count():
+def hard_prey_count():
     return int(config_map['animats']['count']['hard_prey'])
 
 

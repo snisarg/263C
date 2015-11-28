@@ -88,7 +88,7 @@ class World:
         self.__init_predator()
 
     def __init_easy_prey(self):
-        for i in range(config.animats_easy_prey_count()):
+        for i in range(config.easy_prey_count()):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 prey = animat.EPrey(coord[0], coord[1])
@@ -98,7 +98,7 @@ class World:
                 i -= 1
 
     def __init_hard_prey(self):
-        for i in range(config.animats_hard_prey_count()):
+        for i in range(config.hard_prey_count()):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 prey = animat.HPrey(coord[0], coord[1])
@@ -108,7 +108,7 @@ class World:
                 i -= 1
 
     def __init_predator(self):
-        for i in range(config.animats_predator_count()):
+        for i in range(config.predator_count()):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 predator = animat.Predator(coord[0], coord[1])
