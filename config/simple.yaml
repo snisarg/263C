@@ -15,8 +15,8 @@ clock:
 
 animats:
   count:
-    easy_prey: 65
-    hard_prey: 0
+    easy_prey: 45
+    hard_prey: 20
     predator: 13
   range:
     easy_prey: 5

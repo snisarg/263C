@@ -224,9 +224,25 @@ class HPrey(Animat):
     def move(self, game_clock):
         if game_clock % config.easy_prey_range() + 1 == 0:
             return
-        coord = random_walk()
-        while grid.singleton_grid.is_obstacle(coord):
+        closest_animats = grid.singleton_world.around_point(self.position, config.hard_prey_range())
+        step_calc = StepCalculator((10, 6, 4, 2, 1))
+        for level in closest_animats:
+            for block in level:
+                for anim in block:
+                    if isinstance(anim, Predator):
+                        # Escaping 0 differences for now because of toroidal diff bug
+                        diff = distance_diff(self.position, anim.position, config.hard_prey_range())
+                        print diff
+                        if not (diff[0] == 0 and diff[1] == 0):
+                            step_calc.add(diff)
+
+        if not step_calc.get_count() == 0:
+            coord = step_calc.get_decision()
+        else:
+            # Nothing in site, random walk.
             coord = random_walk()
+            while grid.singleton_grid.is_obstacle(coord):
+                coord = random_walk()
         grid.singleton_world.move_animat(self, coord)
 
     def update_position(self, predators,markposition):
