@@ -70,6 +70,10 @@ class Grid:
         self.grid[coord[0]][coord[1]].occupants.append(occupant)
         return coord
 
+    def get_occupants_in(self, coord):
+        coord[0] %= config.grid_height()
+        coord[1] %= config.grid_width()
+        return self.grid[coord[0]][coord[1]].occupants
 
 class World:
 
@@ -121,6 +125,22 @@ class World:
             animat.position = new_coord
         else:
             print "Animat not in position indicated by the animat object."
+
+    def around_point(self, coord, view_range):
+        ranged_animats = []     # Will contain animats in order of ranges.
+        for r in range(view_range):     # Range 0, or adjacent cells, up to vision.
+            single_range = []
+            # Look in the cells at this level
+            # Height constant iterations
+            for i in range(-1-r, 2+r):
+                single_range.append(self.grid.get_occupants_in([coord[0]-r-1, coord[1]+i]))
+                single_range.append(self.grid.get_occupants_in([coord[0]+r+1, coord[1]+i]))
+            # Width constant iterations
+            for i in range(-1-r, 2+r):
+                single_range.append(self.grid.get_occupants_in([coord[0]+i, coord[1]-r-1]))
+                single_range.append(self.grid.get_occupants_in([coord[0]+i, coord[1]+r+1]))
+            ranged_animats.append(single_range)
+        return ranged_animats
 
     def tick(self):
         # Pick the next step
