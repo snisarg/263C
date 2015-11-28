@@ -13,8 +13,8 @@ class OccupantType:
     COLOUR_MAP = {EMPTY: (240, 240, 240),  #RGB values
                   OBSTACLE: (10, 10, 10),
                   animat.Predator: (255, 0, 0),
-                  animat.EPrey: (0, 127, 0),
-                  animat.HPrey: (0, 255, 0),
+                  animat.EPrey: (0, 255, 0),
+                  animat.HPrey: (0, 127, 0),
                   GRASS: (242, 255, 242)}
 
 
@@ -98,7 +98,7 @@ class World:
                 i -= 1
 
     def __init_hard_prey(self):
-        for i in range(config.animats_easy_prey_count()):
+        for i in range(config.animats_hard_prey_count()):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 prey = animat.HPrey(coord[0], coord[1])
@@ -108,7 +108,7 @@ class World:
                 i -= 1
 
     def __init_predator(self):
-        for i in range(config.animats_easy_prey_count()):
+        for i in range(config.animats_predator_count()):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 predator = animat.Predator(coord[0], coord[1])
@@ -133,12 +133,20 @@ class World:
             # Look in the cells at this level
             # Height constant iterations
             for i in range(-1-r, 2+r):
-                single_range.append(self.grid.get_occupants_in([coord[0]-r-1, coord[1]+i]))
-                single_range.append(self.grid.get_occupants_in([coord[0]+r+1, coord[1]+i]))
+                occ = self.grid.get_occupants_in([coord[0]-r-1, coord[1]+i])
+                if occ:
+                    single_range.append(occ)
+                occ = self.grid.get_occupants_in([coord[0]+r+1, coord[1]+i])
+                if occ:
+                    single_range.append(occ)
             # Width constant iterations
             for i in range(-1-r, 2+r):
-                single_range.append(self.grid.get_occupants_in([coord[0]+i, coord[1]-r-1]))
-                single_range.append(self.grid.get_occupants_in([coord[0]+i, coord[1]+r+1]))
+                occ = self.grid.get_occupants_in([coord[0]+i, coord[1]-r-1])
+                if occ:
+                    single_range.append(occ)
+                occ = self.grid.get_occupants_in([coord[0]+i, coord[1]+r+1])
+                if occ:
+                    single_range.append(occ)
             ranged_animats.append(single_range)
         return ranged_animats
 
