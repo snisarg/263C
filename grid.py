@@ -173,6 +173,8 @@ class World:
         # Process the movement and results
         # Right now only Predators can take actions of their movement.
         for predator in self.predators:
+            # Reduce wait time
+            predator.reduce_wait()
             predator.act()
             predator.update_energy(-1)
         self.clock += 1  # increment timer.
