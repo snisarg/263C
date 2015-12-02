@@ -1,5 +1,5 @@
 import random
-from qlearning import QLearning
+from qlearning import *
 import config
 import grid
 import math
@@ -179,7 +179,6 @@ class HPrey(Animat):
         grid.singleton_world.move_animat(self, coord)
 
 
-
 class Predator(Animat):
 
     def __init__(self, x, y):
@@ -190,30 +189,42 @@ class Predator(Animat):
         self.killed = False
         self.length = 0
 
+    # Returns animat closest to predator's positions
     def __closest_animat(self):
         closest_animats = grid.singleton_world.around_point(self.position, config.predator_range())
         for level in closest_animats:
             for block in level:
                 for anim in block:
                     if isinstance(anim, EPrey) or isinstance(anim, HPrey):
-                        return anim.position
+                        return anim # Return the anim object which is closest
         return None
 
     def move(self, game_clock):
         if game_clock % (config.predator_speed() + 1) == 0:
             return
-        coord = self.__closest_animat()
-        # Send to sense state function
-        # Sense energy and coord
-        # Get action for state
-        if coord is not None:   # Chase easy or hard prey
+
+        anim = self.__closest_animat()
+        if anim is None:
+            coord = None    # No prey in sight
+        else:
+            coord = anim.position   # anim is in sight
+        # # Sense state and obtain action
+        current_state = self.sense_state(anim)
+        current_action = self.qlearn.choose_action(current_state)
+        # if current_action[0] == Action.MoveRandomly:
+        #     pass
+        # elif current_action[0] == Action.TowardsEasyPrey:
+        #     pass
+        # elif current_action[0] == Action.TowardsHardPrey:
+        #     pass
+
+        if coord is not None:
             coord = normalise_distance(
                 distance_diff(self.position, coord, config.predator_range()), config.predator_range())
-        else:   # Random walk!
+        else:
             coord = random_walk()
             while grid.singleton_grid.is_obstacle(coord):
                 coord = random_walk()
-        # Move animat to next position
         grid.singleton_world.move_animat(self, coord)
 
     def act(self):
@@ -221,3 +232,26 @@ class Predator(Animat):
         for animat in occupants:
             if isinstance(animat, EPrey) or isinstance(animat, HPrey):
                 grid.singleton_world.kill(animat)
+
+
+# --- Return the state of the Animat
+    def sense_state(self, closest_animat):
+
+            list_state = []
+
+            if closest_animat is None:
+                list_state.append(State.PreyNotVisible)
+            else:
+
+                # Check Hunger
+                if self.energy < self.hunger_threshold:
+                    list_state.append(State.Hungry)
+                else:
+                    list_state.append(State.NotHungry)
+                    return list_state
+
+                if isinstance(closest_animat, EPrey):
+                    list_state.append(State.PreyEasyClosest)
+                else:
+                    list_state.append(State.PreyHardClosest)
+            return list_state
