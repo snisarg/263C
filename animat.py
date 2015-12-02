@@ -105,7 +105,7 @@ class EPrey(Animat):
     def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = 400
+        self.energy = random.randint(400,500)
 
     def move(self, game_clock):
         if game_clock % (config.easy_prey_speed() + 1) == 0:
@@ -139,7 +139,7 @@ class HPrey(Animat):
     def __init__(self,x,y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = 1000
+        self.energy = random.randint(1000,1200)
 
     def move(self, game_clock):
         if game_clock % (config.hard_prey_speed() + 1) == 0:
@@ -172,6 +172,7 @@ class Predator(Animat):
         self.position = [x, y]
         self.energy = random.randint(600,1000)
         self.hunger_threshold = 700
+        self.wait_time = 0
 
     # Returns animat closest to predator's positions
     def __closest_animat(self):
@@ -185,6 +186,14 @@ class Predator(Animat):
 
     def move(self, game_clock):
         if game_clock % (config.predator_speed() + 1) == 0:
+            return
+
+        # If predator has lost to the hard prey, make him move randomly until wait_time = 0
+        if self.wait_time > 0:
+            coord = random_walk()
+            while grid.singleton_grid.is_obstacle(coord):
+                coord = random_walk()
+            grid.singleton_world.move_animat(self, coord)
             return
 
         anim = self.__closest_animat()
@@ -213,7 +222,6 @@ class Predator(Animat):
         else:
             # Go towards the signal
             pass
-
         grid.singleton_world.move_animat(self, coord)
 
 # -- Battle between two animats is done here!
@@ -225,12 +233,16 @@ class Predator(Animat):
                 grid.singleton_world.kill(animat)
                 break
             elif isinstance(animat,HPrey):
-                self.update_energy(400)
-                grid.singleton_world.kill(animat)
+                if self.energy > animat.energy:
+                    self.update_energy(400)
+                    grid.singleton_world.kill(animat)
+                else:
+                    print "Hard fights back at ", animat.position
+                    # Must wait before chasing again
+                    self.wait_time = 10
+                    self.update_energy(-100)
+                    animat.energy -=100
                 break
-            # Can't kill more that one occupant
-
-
 
 
 # --- Return the state of the Animat
@@ -257,3 +269,7 @@ class Predator(Animat):
 
     def update_energy(self, amount):
         self.energy += amount
+
+    def reduce_wait(self):
+        if self.wait_time > 0:
+            self.wait_time -= 1
