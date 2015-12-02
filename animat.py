@@ -107,9 +107,6 @@ class EPrey(Animat):
         self.position = [x, y]
         self.energy = 400
 
-        # Set to true prey dies
-        self.killed = False
-
     def move(self, game_clock):
         if game_clock % (config.easy_prey_speed() + 1) == 0:
             return
@@ -137,17 +134,12 @@ class EPrey(Animat):
         grid.singleton_world.move_animat(self, coord)
 
 
-
-
-# --- This class can be modified to make sure that the harder prey is tougher to catch. (Change speed)
 class HPrey(Animat):
 
     def __init__(self,x,y):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = 1000
-        # Set to true prey dies
-        self.killed = False
 
     def move(self, game_clock):
         if game_clock % (config.hard_prey_speed() + 1) == 0:
@@ -180,8 +172,6 @@ class Predator(Animat):
         self.position = [x, y]
         self.energy = random.randint(600,1000)
         self.hunger_threshold = 700
-        self.killed = False
-        self.length = 0
 
     # Returns animat closest to predator's positions
     def __closest_animat(self):
