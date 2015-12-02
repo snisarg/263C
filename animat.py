@@ -98,13 +98,6 @@ class Animat:
         self.age = 0
         self.qlearn = QLearning()
 
-    def randomjump(self, list):
-            return random.choice(list)
-
-    def modulus_movement(self):
-        self.position_x %= config.grid_width()
-        self.position_y %= config.grid_height()
-
 
 # --- Easy Prey class def
 class EPrey(Animat):
@@ -185,7 +178,7 @@ class Predator(Animat):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = 1000
-        self.hunger_threshold = 900
+        self.hunger_threshold = 800
         self.killed = False
         self.length = 0
 
@@ -208,25 +201,31 @@ class Predator(Animat):
             coord = None    # No prey in sight
         else:
             coord = anim.position   # anim is in sight
-        # # Sense state and obtain action
+
         current_state = self.sense_state(anim)
         current_action = self.qlearn.choose_action(current_state)
-        # if current_action[0] == Action.MoveRandomly:
-        #     pass
-        # elif current_action[0] == Action.TowardsEasyPrey:
-        #     pass
-        # elif current_action[0] == Action.TowardsHardPrey:
-        #     pass
 
-        if coord is not None:
-            coord = normalise_distance(
-                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
-        else:
+        if current_action[0] == Action.MoveRandomly:
             coord = random_walk()
             while grid.singleton_grid.is_obstacle(coord):
                 coord = random_walk()
+
+        elif current_action[0] == Action.TowardsEasyPrey or current_action[0] == Action.TowardsHardPrey:
+            coord = normalise_distance(
+                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
+
+        elif current_action[0] == Action.SignalHelp:
+            coord = normalise_distance(
+                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
+            # Signal for help!
+
+        else:
+            # Go towards the signal
+            pass
+
         grid.singleton_world.move_animat(self, coord)
 
+# -- Battle between two animats is done here!
     def act(self):
         occupants = grid.singleton_grid.get_occupants_in(self.position)
         for animat in occupants:
