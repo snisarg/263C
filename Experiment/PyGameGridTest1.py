@@ -1,3 +1,3 @@
 from environment import Environment
 
-x = Environment(10,10,5)
+x = Environment(10,10,2)
