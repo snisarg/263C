@@ -138,13 +138,14 @@ class EPrey(Animat):
 
 
 
+
 # --- This class can be modified to make sure that the harder prey is tougher to catch. (Change speed)
 class HPrey(Animat):
 
     def __init__(self,x,y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = 400
+        self.energy = 1000
         # Set to true prey dies
         self.killed = False
 
@@ -177,8 +178,8 @@ class Predator(Animat):
     def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = 1000
-        self.hunger_threshold = 800
+        self.energy = random.randint(600,1000)
+        self.hunger_threshold = 700
         self.killed = False
         self.length = 0
 
@@ -198,9 +199,9 @@ class Predator(Animat):
 
         anim = self.__closest_animat()
         if anim is None:
-            coord = None    # No prey in sight
+            coord = None
         else:
-            coord = anim.position   # anim is in sight
+            coord = anim.position
 
         current_state = self.sense_state(anim)
         current_action = self.qlearn.choose_action(current_state)
@@ -229,8 +230,17 @@ class Predator(Animat):
     def act(self):
         occupants = grid.singleton_grid.get_occupants_in(self.position)
         for animat in occupants:
-            if isinstance(animat, EPrey) or isinstance(animat, HPrey):
+            if isinstance(animat, EPrey):
+                self.update_energy(200)
                 grid.singleton_world.kill(animat)
+                break
+            elif isinstance(animat,HPrey):
+                self.update_energy(400)
+                grid.singleton_world.kill(animat)
+                break
+            # Can't kill more that one occupant
+
+
 
 
 # --- Return the state of the Animat
@@ -254,3 +264,6 @@ class Predator(Animat):
                 else:
                     list_state.append(State.PreyHardClosest)
             return list_state
+
+    def update_energy(self, amount):
+        self.energy += amount

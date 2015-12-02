@@ -174,6 +174,7 @@ class World:
         # Right now only Predators can take actions of their movement.
         for predator in self.predators:
             predator.act()
+            predator.update_energy(-1)
         self.clock += 1  # increment timer.
 
 
