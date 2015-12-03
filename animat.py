@@ -190,10 +190,6 @@ class Predator(Animat):
 
         # If predator has lost to the hard prey, make him move randomly until wait_time = 0
         if self.wait_time > 0:
-            coord = random_walk()
-            while grid.singleton_grid.is_obstacle(coord):
-                coord = random_walk()
-            grid.singleton_world.move_animat(self, coord)
             return
 
         anim = self.__closest_animat()
