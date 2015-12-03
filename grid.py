@@ -123,7 +123,7 @@ class World:
         best_predators = []
         count = min(len(self.predators),config.best_predator_count())
 
-        # Find best predators based on energy and store in best_predators[]
+        # Find best predators based on energy(selection pressure) and store in best_predators[]
         for j in range(count):
             max_predator = self.predators[0]
             rem_i = 0
