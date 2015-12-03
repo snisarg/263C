@@ -14,6 +14,8 @@ game_grid = grid.singleton_grid.grid
 screen = pygame.display.set_mode(
     (len(game_grid)*config.cell_pixel_height(), len(game_grid[0])*config.cell_pixel_width()))
 generation_size = config.get_generation_size()
+generation_number = 0
+print "Generation :", generation_number
 while not done:
     # --- Main event loop
     for event in pygame.event.get(): # User did something
@@ -37,7 +39,8 @@ while not done:
 
     generation_size -=1
     if generation_size == 0:
-        print "New generation!"
+        generation_number += 1
+        print "Generation :", generation_number
         grid.singleton_grid = Grid()
         grid.singleton_world.new_generation(grid.singleton_grid)
         game_grid = grid.singleton_grid.grid
