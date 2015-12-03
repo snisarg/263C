@@ -232,7 +232,11 @@ class Predator(Animat):
                 if self.energy > animat.energy:
                     self.update_energy(400)
                     grid.singleton_world.kill(animat)
-                else:
+
+                # BUG - Hard prey may take a random walk and come back into same spot,
+                # Cause re-fight even when wait_time > 0. Thus AND condition is added.
+
+                elif self.energy <= animat.energy and self.wait_time == 0:
                     print "Hard fights back at ", animat.position
                     # Must wait before chasing again
                     self.wait_time = 10
