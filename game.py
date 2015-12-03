@@ -1,6 +1,7 @@
 import pygame
 import grid
 import config
+from grid import *
 
 pygame.init()
 pygame.display.set_caption('Predators attack!')
@@ -12,7 +13,7 @@ game_grid = grid.singleton_grid.grid
 
 screen = pygame.display.set_mode(
     (len(game_grid)*config.cell_pixel_height(), len(game_grid[0])*config.cell_pixel_width()))
-
+generation_size = config.get_generation_size()
 while not done:
     # --- Main event loop
     for event in pygame.event.get(): # User did something
@@ -33,6 +34,12 @@ while not done:
 
     pygame.display.flip()
     clock.tick(config.render_refresh_clock_ticks())
-    # TODO create_new_predators
-    # TODO reinitialise
+
+    generation_size -=1
+    if generation_size == 0:
+        print "New generation!"
+        grid.singleton_grid = Grid()
+        grid.singleton_world.new_generation(grid.singleton_grid)
+        game_grid = grid.singleton_grid.grid
+        generation_size = config.get_generation_size()
 pygame.quit()

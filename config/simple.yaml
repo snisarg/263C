@@ -12,6 +12,7 @@ grass: 800
 
 clock:
   ticks: 10
+  generation_size: 150
 
 animats:
   count:

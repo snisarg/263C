@@ -30,6 +30,10 @@ def render_refresh_clock_ticks():
     return int(config_map['clock']['ticks'])
 
 
+def get_generation_size():
+    return int(config_map['clock']['generation_size'])
+
+
 def predator_count():
     return int(config_map['animats']['count']['predator'])
 

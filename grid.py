@@ -108,8 +108,9 @@ class World:
             else:
                 i -= 1
 
-    def __new_generation(self):
+    def new_generation(self, new_grid):
 
+        self.grid = new_grid
         easy_prey_count = len(self.easy_preys)
         self.easy_preys = []
         self.__init_easy_prey(easy_prey_count)
@@ -134,7 +135,7 @@ class World:
             best_predators.append(max_predator)
             self.predators.pop(rem_i)
 
-        predator_count = len(self.predators)
+        predator_count = len(self.predators) + count
         self.predators = []
         self.__init_predator(predator_count)
 
