@@ -18,6 +18,7 @@ animats:
     easy_prey: 25
     hard_prey: 20
     predator: 5
+    best_predator: 3
   range:
     easy_prey: 5
     hard_prey: 5

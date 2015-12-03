@@ -1,4 +1,5 @@
 from random import randint
+import random
 import config
 import animat
 
@@ -83,12 +84,12 @@ class World:
         self.hard_preys = []
         self.predators = []
         self.clock = 0
-        self.__init_easy_prey()
-        self.__init_hard_prey()
-        self.__init_predator()
+        self.__init_easy_prey(config.easy_prey_count())
+        self.__init_hard_prey(config.hard_prey_count())
+        self.__init_predator(config.predator_count())
 
-    def __init_easy_prey(self):
-        for i in range(config.easy_prey_count()):
+    def __init_easy_prey(self,count):
+        for i in range(count):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 prey = animat.EPrey(coord[0], coord[1])
@@ -97,8 +98,8 @@ class World:
             else:
                 i -= 1
 
-    def __init_hard_prey(self):
-        for i in range(config.hard_prey_count()):
+    def __init_hard_prey(self,count):
+        for i in range(count):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 prey = animat.HPrey(coord[0], coord[1])
@@ -107,8 +108,44 @@ class World:
             else:
                 i -= 1
 
-    def __init_predator(self):
-        for i in range(config.predator_count()):
+    def __new_generation(self):
+
+        easy_prey_count = len(self.easy_preys)
+        self.easy_preys = []
+        self.__init_easy_prey(easy_prey_count)
+
+        hard_prey_count = len(self.hard_preys)
+        self.hard_preys = []
+        self.__init_hard_prey(hard_prey_count)
+
+        self.clock = 0
+
+        best_predators = []
+        count = min(len(self.predators),config.best_predator_count())
+
+        # Find best predators based on energy and store in best_predators[]
+        for j in range(count):
+            max_predator = self.predators[0]
+            rem_i = 0
+            for i in range(len(self.predators)):
+                if self.predators[i].energy > max_predator.energy:
+                    max_predator = self.predators[i]
+                    rem_i = i
+            best_predators.append(max_predator)
+            self.predators.pop(rem_i)
+
+        predator_count = len(self.predators)
+        self.predators = []
+        self.__init_predator(predator_count)
+
+        # Potential memory leak
+        # Children have same Q tables as that of a random parent
+        for i in range(predator_count):
+            self.predators[i].qlearn = random.choice(best_predators).qlearn
+
+
+    def __init_predator(self,count):
+        for i in range(count):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
                 predator = animat.Predator(coord[0], coord[1])

@@ -42,6 +42,10 @@ def hard_prey_count():
     return int(config_map['animats']['count']['hard_prey'])
 
 
+def best_predator_count():
+    return int(config_map['animats']['count']['best_predator'])
+
+
 def grass_count():
     return int(config_map['grass'])
 
