@@ -105,7 +105,7 @@ class EPrey(Animat):
     def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(400,500)
+        self.energy = random.randint(400, 500)
 
     def move(self, game_clock):
         if game_clock % (config.easy_prey_speed() + 1) == 0:
@@ -136,10 +136,10 @@ class EPrey(Animat):
 
 class HPrey(Animat):
 
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(1000,1200)
+        self.energy = random.randint(1000, 1200)
 
     def move(self, game_clock):
         if game_clock % (config.hard_prey_speed() + 1) == 0:
@@ -170,7 +170,7 @@ class Predator(Animat):
     def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(600,1000)
+        self.energy = random.randint(600, 1000)
         self.hunger_threshold = 700
         self.wait_time = 0
 
@@ -181,7 +181,7 @@ class Predator(Animat):
             for block in level:
                 for anim in block:
                     if isinstance(anim, EPrey) or isinstance(anim, HPrey):
-                        return anim # Return the anim object which is closest
+                        return anim  # Return the anim object which is closest
         return None
 
     def move(self, game_clock):
@@ -225,23 +225,29 @@ class Predator(Animat):
         occupants = grid.singleton_grid.get_occupants_in(self.position)
         for animat in occupants:
             if isinstance(animat, EPrey):
+                reward = self.reward(animat)
                 self.update_energy(200)
                 grid.singleton_world.kill(animat)
+                self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                 break
-            elif isinstance(animat,HPrey):
+
+            elif isinstance(animat, HPrey):
                 if self.energy > animat.energy:
+                    reward = self.reward(animat)
                     self.update_energy(400)
                     grid.singleton_world.kill(animat)
-
-                # BUG - Hard prey may take a random walk and come back into same spot,
-                # Cause re-fight even when wait_time > 0. Thus AND condition is added.
+                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
 
                 elif self.energy <= animat.energy and self.wait_time == 0:
                     print "Hard fights back at ", animat.position
+                    # Both predator and prey lose energy
+                    self.update_energy(-100)
+                    animat.energy -= 100
+
                     # Must wait before chasing again
                     self.wait_time = 10
-                    self.update_energy(-100)
-                    animat.energy -=100
+                    reward = 0
+                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                 break
 
 
@@ -273,3 +279,9 @@ class Predator(Animat):
     def reduce_wait(self):
         if self.wait_time > 0:
             self.wait_time -= 1
+
+    def reward(self, animat):
+        if isinstance(animat, EPrey):
+            return 0.5
+        else:
+            return 1

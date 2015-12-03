@@ -36,10 +36,10 @@ class QLearning:
     # Value is a list of actions followed by their q-values
     def settable(self):
         self.table[State.PreyNotVisible] = [Action.MoveRandomly, self.rand()]
-        self.table[(State.Hungry,State.PreyEasyClosest)] = [Action.MoveRandomly, self.rand(), Action.TowardsEasyPrey,
+        self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.MoveRandomly, self.rand(), Action.TowardsEasyPrey,
                                                              self.rand()]
-        self.table[(State.Hungry,State.PreyHardClosest)] = [Action.MoveRandomly, self.rand(),Action.TowardsHardPrey,
-                                                              self.rand(), Action.SignalHelp ,self.rand()]
+        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.MoveRandomly, self.rand(), Action.TowardsHardPrey,
+                                                             self.rand(), Action.SignalHelp, self.rand()]
         self.table[State.NotHungry] = [Action.MoveRandomly, self.rand()]
         # self.table[State.PredatorHelp] = [Action.MoveRandomly, self.rand() , Action.TowardsSignal, self.rand()]
 
@@ -72,7 +72,11 @@ class QLearning:
 
 
 # --- Perform Q Learning
-    def doQLearning(self,reward,state):
+    def doQLearning(self, reward, state):
+
+        # For the first iteration of a generation!
+        if self.prev_state is None:
+            return
 
         if len(self.prev_state) == 1:
             prev_action_row = self.table.get((self.prev_state[0]))
@@ -87,10 +91,10 @@ class QLearning:
         newqtemp = self.choose_action(state)    # Contains best action and it's weight
         newq = newqtemp[1]  # Newq contains best weight
 
-        # QLdeearning
+        # QLearning
         newq = self.alpha*(reward+(self.gamma * newq)-oldq)  # Calculate newQ
 
-        # print "Updated Q value " , oldq , newq
+        print "Updated Q value ", oldq , newq
         # Update QValue and reflect in Table
         prev_action_row[self.prev_max_index-1] = newq
         self.table[tuple(self.prev_state)] = prev_action_row
