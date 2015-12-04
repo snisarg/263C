@@ -36,9 +36,9 @@ class QLearning:
     # Value is a list of actions followed by their q-values
     def settable(self):
         self.table[State.PreyNotVisible] = [Action.MoveRandomly, self.rand()]
-        self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.MoveRandomly, self.rand(), Action.TowardsEasyPrey,
+        self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.TowardsEasyPrey,
                                                              self.rand()]
-        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.MoveRandomly, self.rand(), Action.TowardsHardPrey,
+        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.TowardsHardPrey,
                                                              self.rand(), Action.SignalHelp, self.rand()]
         self.table[State.NotHungry] = [Action.MoveRandomly, self.rand()]
         # self.table[State.PredatorHelp] = [Action.MoveRandomly, self.rand() , Action.TowardsSignal, self.rand()]
