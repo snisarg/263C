@@ -40,7 +40,6 @@ while not done:
     generation_size -=1
     if generation_size == 0:
         generation_number += 1
-        grid.singleton_world.printqtables()
         print "----------Generation :", generation_number
         grid.singleton_grid = Grid()
         grid.singleton_world.new_generation(grid.singleton_grid)

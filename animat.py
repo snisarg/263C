@@ -44,7 +44,6 @@ def normalise_distance(coord, level):
             difference[1] += 1
     return difference
 
-
 class StepCalculator:
 
     def __init__(self, step_weight):
@@ -99,6 +98,13 @@ class Animat:
         self.age = 0
         self.qlearn = QLearning()
 
+    def randomjump(self, list):
+            return random.choice(list)
+
+    def modulus_movement(self):
+        self.position_x %= config.grid_width()
+        self.position_y %= config.grid_height()
+
 
 # --- Easy Prey class def
 class EPrey(Animat):
@@ -106,7 +112,10 @@ class EPrey(Animat):
     def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(400, 500)
+        self.energy = 400
+
+        # Set to true prey dies
+        self.killed = False
 
     def move(self, game_clock):
         if game_clock % (config.easy_prey_speed() + 1) == 0:
@@ -135,19 +144,19 @@ class EPrey(Animat):
         grid.singleton_world.move_animat(self, coord)
 
 
+
+# --- This class can be modified to make sure that the harder prey is tougher to catch. (Change speed)
 class HPrey(Animat):
 
-    def __init__(self, x, y):
+    def __init__(self,x,y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(1000, 1200)
-        self.wait_time = 0
+        self.energy = 400
+        # Set to true prey dies
+        self.killed = False
 
     def move(self, game_clock):
         if game_clock % (config.hard_prey_speed() + 1) == 0:
-            return
-
-        if self.wait_time > 0:
             return
         closest_animats = grid.singleton_world.around_point(self.position, config.hard_prey_range())
         step_calc = StepCalculator((10, 6, 4, 2, 1))
@@ -169,94 +178,54 @@ class HPrey(Animat):
                 coord = random_walk()
         grid.singleton_world.move_animat(self, coord)
 
-    def reduce_wait(self):
-        if self.wait_time > 0:
-            self.wait_time -= 1
-
 
 class Predator(Animat):
 
     def __init__(self, x, y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(600, 1000)
-        self.hunger_threshold = 1000
-        self.wait_time = 0
-        self.making_signal = False  # Internal neuron
+        self.energy = 1000
+        self.hunger_threshold = 900
+        self.killed = False
+        self.length = 0
 
-    # Returns prey closest to predator's positions OR closest predator making signal for help!
+    # Returns animat closest to predator's positions
     def __closest_animat(self):
         closest_animats = grid.singleton_world.around_point(self.position, config.predator_range())
         for level in closest_animats:
             for block in level:
                 for anim in block:
                     if isinstance(anim, EPrey) or isinstance(anim, HPrey):
-                        return anim  # Return the anim object which is closest
-                    elif isinstance(anim, Predator) and anim.making_signal == True:
-                        return anim
+                        return anim # Return the anim object which is closest
         return None
 
     def move(self, game_clock):
         if game_clock % (config.predator_speed() + 1) == 0:
             return
 
-        # If predator has lost to the hard prey, make him move randomly until wait_time = 0
-        if self.wait_time > 0:
-            return
-
         anim = self.__closest_animat()
         if anim is None:
-            coord = None
+            coord = None    # No prey in sight
         else:
-            coord = anim.position
-
+            coord = anim.position   # anim is in sight
+        # # Sense state and obtain action
         current_state = self.sense_state(anim)
         current_action = self.qlearn.choose_action(current_state)
-        self.making_signal = False
 
-        if current_action[0] == Action.MoveRandomly:
+        if coord is not None:
+            coord = normalise_distance(
+                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
+        else:
             coord = random_walk()
             while grid.singleton_grid.is_obstacle(coord):
                 coord = random_walk()
-        else:
-            if current_action[0] == Action.SignalForHelp:
-                self.making_signal = True
-            coord = normalise_distance(
-                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
-
         grid.singleton_world.move_animat(self, coord)
 
-# -- Battle between two animats is done here!
     def act(self):
         occupants = grid.singleton_grid.get_occupants_in(self.position)
         for animat in occupants:
-            if isinstance(animat, EPrey):
-                reward = self.reward(animat)
-                self.update_energy(200)
+            if isinstance(animat, EPrey) or isinstance(animat, HPrey):
                 grid.singleton_world.kill(animat)
-                self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
-                self.making_signal = False
-
-            elif isinstance(animat, HPrey):
-                if self.energy > animat.energy:
-                    reward = self.reward(animat)
-                    self.update_energy(400)
-                    grid.singleton_world.kill(animat)
-                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
-                    self.making_signal = False
-
-                elif self.energy <= animat.energy and self.wait_time == 0:
-                    print "Hard fights back at ", animat.position
-                    # Both predator and prey lose energy
-                    self.update_energy(-100)
-                    animat.energy -= 100
-
-                    # Make predator wait before chasing again
-                    self.wait_time = 10
-                    # Make hard prey wait before it can run away again
-                    animat.wait_time = 3
-                    reward = 0
-                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
 
 
 # --- Return the state of the Animat
@@ -275,30 +244,8 @@ class Predator(Animat):
                     list_state.append(State.NotHungry)
                     return list_state
 
-                if isinstance(closest_animat, Predator):
-                    list_state.append(State.FollowSignal)
-                elif isinstance(closest_animat, EPrey):
+                if isinstance(closest_animat, EPrey):
                     list_state.append(State.PreyEasyClosest)
-                elif isinstance(closest_animat, HPrey) and self.making_signal == False:
+                else:
                     list_state.append(State.PreyHardClosest)
-                elif isinstance(closest_animat, HPrey) and self.making_signal == True:
-                    list_state.append(State.PredatorAskHelp)
             return list_state
-
-    def update_energy(self, amount):
-        self.energy += amount
-
-    def reduce_wait(self):
-        if self.wait_time > 0:
-            self.wait_time -= 1
-            if self.wait_time == 0:
-                self.making_signal = False
-
-    def reward(self, animat):
-        if isinstance(animat, EPrey):
-            return 0.5
-        else:
-            return 1
-
-    def printqtable(self):
-        print self.qlearn.table
