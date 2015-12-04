@@ -192,7 +192,6 @@ class Predator(Animat):
 
         # If predator has lost to the hard prey, make him move randomly until wait_time = 0
         if self.wait_time > 0:
-            self.making_signal = False
             return
 
         anim = self.__closest_animat()
