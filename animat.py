@@ -242,7 +242,7 @@ class Predator(Animat):
                 reward = self.reward(animat)
                 self.update_energy(200)
                 grid.singleton_world.kill(animat)
-                self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
+                # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                 self.making_signal = False
                 break
 
@@ -251,7 +251,7 @@ class Predator(Animat):
                     reward = self.reward(animat)
                     self.update_energy(400)
                     grid.singleton_world.kill(animat)
-                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
+                    # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                     self.making_signal = False
 
                 elif self.energy <= animat.energy and self.wait_time == 0:
@@ -263,7 +263,7 @@ class Predator(Animat):
                     # Must wait before chasing again
                     self.wait_time = 10
                     reward = 0
-                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
+                    # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                     self.making_signal = False
                 break
 
