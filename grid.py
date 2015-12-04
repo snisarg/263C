@@ -200,6 +200,10 @@ class World:
             self.predators.remove(animat)
             print "Predator died at " + str(animat.position)
 
+    def printqtables(self):
+        for predator in self.predators:
+            predator.printqtable()
+
     def tick(self):
         # Pick the next step
         for easy in self.easy_preys:

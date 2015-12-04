@@ -21,8 +21,6 @@ class Action:
 
 class QLearning:
 
-    prev_state = None
-    prev_max_index = None
 
     def __init__(self, epsilon=0.1, alpha=0.2, gamma=0.9):
         self.table = {}
@@ -30,6 +28,9 @@ class QLearning:
         self.epsilon = epsilon
         self.alpha = alpha
         self.gamma = gamma
+        self.prev_state = None
+        self.prev_max_index = None
+        self.current_action = None
         self.settable()
 
 # --- Initialise Q-table
@@ -50,27 +51,27 @@ class QLearning:
     def choose_action(self, current_state):
 
         if len(current_state) == 1:
-            current_action = self.table.get((current_state[0]))
+            self.current_action = self.table.get((current_state[0]))
         else:
-            current_action = self.table.get(tuple(current_state))
+            self.current_action = self.table.get(tuple(current_state))
 
-        if current_action is None:
+        if self.current_action is None:
             return None
 
         # Iterating through current action and finding action with max value
         max_qvalue = -1
         max_index = 0
         index = 0
-        while index < len(current_action)-1:
-            if max_qvalue < current_action[index+1]:
+        while index < len(self.current_action)-1:
+            if max_qvalue < self.current_action[index+1]:
                 max_index = index
-                max_qvalue = current_action[index+1]
+                max_qvalue = self.current_action[index+1]
             index += 2
         self.prev_state = current_state
         self.prev_max_index = max_index
 
         # Return best action and it's q weight
-        return current_action[max_index], current_action[max_index+1]
+        return self.current_action[max_index], self.current_action[max_index+1]
 
 
 # --- Perform Q Learning
@@ -80,14 +81,12 @@ class QLearning:
         if self.prev_state is None:
             return
 
-        if len(self.prev_state) == 1:
-            prev_action_row = self.table.get((self.prev_state[0]))
-        else:
-            prev_action_row = self.table.get(tuple(self.prev_state))
-        # Retrieve previous row of actions for previous state
+        prev_state = self.prev_state
+        prev_action = self.current_action
+        prev_max_index = self.prev_max_index
 
         # Find Qt-1
-        oldq = prev_action_row[self.prev_max_index-1]  # prev_maxindex remembers where the previous Q value
+        oldq = prev_action[prev_max_index+1]
 
         # Find Qt
         newqtemp = self.choose_action(state)    # Contains best action and it's weight
@@ -98,8 +97,8 @@ class QLearning:
 
         # print "Updated Q value ", oldq , newq
         # Update QValue and reflect in Table
-        prev_action_row[self.prev_max_index-1] = newq
-        self.table[tuple(self.prev_state)] = prev_action_row
+        prev_action[prev_max_index-1] = newq
+        self.table[tuple(prev_state)] = prev_action
 
 
 # --- Return Random weight from 0 to 1
