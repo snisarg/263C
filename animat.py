@@ -171,7 +171,7 @@ class Predator(Animat):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = random.randint(600, 1000)
-        self.hunger_threshold = 700
+        self.hunger_threshold = 1000
         self.wait_time = 0
 
     # Returns animat closest to predator's positions
