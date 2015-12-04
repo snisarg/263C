@@ -184,6 +184,8 @@ class Predator(Animat):
                 for anim in block:
                     if isinstance(anim, EPrey) or isinstance(anim, HPrey):
                         return anim  # Return the anim object which is closest
+                    elif isinstance(anim, Predator) and anim.making_signal is True:
+                        return anim
         return None
 
     def move(self, game_clock):
@@ -202,15 +204,15 @@ class Predator(Animat):
 
         current_state = self.sense_state(anim)
         current_action = self.qlearn.choose_action(current_state)
+        self.making_signal = False
 
         if current_action[0] == Action.MoveRandomly:
-            # print "Move randomly!"
             coord = random_walk()
             while grid.singleton_grid.is_obstacle(coord):
                 coord = random_walk()
-
         else:
-            # print "Chased prey!"
+            if current_action[0] == Action.SignalForHelp:
+                self.making_signal = True
             coord = normalise_distance(
                 distance_diff(self.position, coord, config.predator_range()), config.predator_range())
 
