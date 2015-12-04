@@ -88,16 +88,18 @@ class QLearning:
 
         # Find Qt
         newqtemp = self.choose_action(state)    # Contains best action and it's weight
-        newq = newqtemp[1]  # Newq contains best weight
+        newq = newqtemp[1]  # Newq contains best/max weight
 
         # QLearning
-        newq = self.alpha*(reward+(self.gamma * newq)-oldq)  # Calculate newQ
+        # Q(t-1) = Q(t-1) + alpha * [ r + (gamma * max(Q(t)) - Q(t-1) ]
+
+        oldq += self.alpha*(reward+(self.gamma * newq)-oldq)  # Calculate newQ
 
         # print "Updated Q value ", oldq , newq
         # Update QValue and reflect in Table
-        print "Before", prev_state, prev_action
-        prev_action[prev_max_index+1] = newq
-        print "After", prev_action
+        # print "Before", prev_state, prev_action
+        prev_action[prev_max_index+1] = oldq
+        # print "After", prev_action
         self.table[tuple(prev_state)] = prev_action
 
 

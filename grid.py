@@ -143,6 +143,9 @@ class World:
         # Children have same Q tables as that of a random parent
         for i in range(predator_count):
             self.predators[i].qlearn = random.choice(best_predators).qlearn
+            self.predators[i].qlearn.prev_state = None
+            self.predators[i].qlearn.prev_max_index = None
+            self.predators[i].qlearn.current_action = None
 
 
     def __init_predator(self,count):

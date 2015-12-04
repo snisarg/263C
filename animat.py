@@ -151,7 +151,7 @@ class HPrey(Animat):
     def __init__(self,x,y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = 400
+        self.energy = random.randint(1000,1200)
         # Set to true prey dies
         self.killed = False
 
@@ -187,7 +187,7 @@ class Predator(Animat):
         self.energy = 1000
         self.hunger_threshold = 1500
         self.killed = False
-        self.length = 0
+        self.wait_time = 0
 
     # Returns animat closest to predator's positions
     def __closest_animat(self):
@@ -201,6 +201,10 @@ class Predator(Animat):
 
     def move(self, game_clock):
         if game_clock % (config.predator_speed() + 1) == 0:
+            return
+
+        if self.wait_time > 0:
+            self.wait_time -= 1
             return
 
         anim = self.__closest_animat()
@@ -224,8 +228,29 @@ class Predator(Animat):
     def act(self):
         occupants = grid.singleton_grid.get_occupants_in(self.position)
         for animat in occupants:
-            if isinstance(animat, EPrey) or isinstance(animat, HPrey):
+            if isinstance(animat, EPrey):
                 grid.singleton_world.kill(animat)
+                # self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
+            elif isinstance(animat, HPrey) and animat.energy <= self.energy:
+                grid.singleton_world.kill(animat)
+                # self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
+            elif isinstance(animat, HPrey) and animat.energy > self.energy:
+                print "Hard prey fought back!"
+                # Both Predator and prey lose energy
+                animat.energy -= 100
+                self.energy -= 100
+                # Predator waits for 10 seconds
+                self.wait_time = 10
+                # self.qlearn.doQLearning(self.get_reward(3), self.sense_state(self.__closest_animat()))
+
+    def get_reward(self,x):
+        if x == 1:
+            return 0.5
+        elif x == 2:
+            return 1
+        else:
+            return -1
+
 
 
 # --- Return the state of the Animat
@@ -249,3 +274,6 @@ class Predator(Animat):
                 else:
                     list_state.append(State.PreyHardClosest)
             return list_state
+
+# So Easy prey are killed. Hard Prey fight back.
+# Predators on losing, must wait on spot, else they keep chasing hard prey continuously.
