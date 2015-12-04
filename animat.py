@@ -184,8 +184,6 @@ class Predator(Animat):
                 for anim in block:
                     if isinstance(anim, EPrey) or isinstance(anim, HPrey):
                         return anim  # Return the anim object which is closest
-                    elif isinstance(anim, Predator) and anim.making_signal is True:
-                        return anim
         return None
 
     def move(self, game_clock):
@@ -211,26 +209,11 @@ class Predator(Animat):
             coord = random_walk()
             while grid.singleton_grid.is_obstacle(coord):
                 coord = random_walk()
-                self.making_signal = False
 
-        elif current_action[0] == Action.TowardsEasyPrey or current_action[0] == Action.TowardsHardPrey:
+        else:
             # print "Chased prey!"
             coord = normalise_distance(
                 distance_diff(self.position, coord, config.predator_range()), config.predator_range())
-            self.making_signal = False
-
-        elif current_action[0] == Action.SignalForHelp:
-            print "Need help at ", self.position, "chasing ", coord
-            coord = normalise_distance(
-                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
-            # Signal for help!
-            self.making_signal = True
-
-        elif current_action[0] == Action.TowardsSignal:
-            print "HELPING ", coord , self.position
-            coord = normalise_distance(
-                distance_diff(self.position, coord, config.predator_range()), config.predator_range())
-            self.making_signal = False
 
         grid.singleton_world.move_animat(self, coord)
 
@@ -257,7 +240,7 @@ class Predator(Animat):
                     print "Hard fights back at ", animat.position
                     # Both predator and prey lose energy
                     self.update_energy(-100)
-                    animat.energy -= 300
+                    animat.energy -= 100
 
                     # Must wait before chasing again
                     self.wait_time = 10
