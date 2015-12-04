@@ -244,7 +244,6 @@ class Predator(Animat):
                 grid.singleton_world.kill(animat)
                 # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                 self.making_signal = False
-                break
 
             elif isinstance(animat, HPrey):
                 if self.energy > animat.energy:
@@ -265,7 +264,6 @@ class Predator(Animat):
                     reward = 0
                     # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                     self.making_signal = False
-                break
 
 
 # --- Return the state of the Animat
