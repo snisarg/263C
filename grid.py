@@ -210,6 +210,7 @@ class World:
             easy.move(self.clock)
         for hard in self.hard_preys:
             hard.move(self.clock)
+            hard.reduce_wait()
         for predator in self.predators:
             predator.move(self.clock)
         # Process the movement and results

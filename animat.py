@@ -141,9 +141,13 @@ class HPrey(Animat):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = random.randint(1000, 1200)
+        self.wait_time = 0
 
     def move(self, game_clock):
         if game_clock % (config.hard_prey_speed() + 1) == 0:
+            return
+
+        if self.wait_time > 0:
             return
         closest_animats = grid.singleton_world.around_point(self.position, config.hard_prey_range())
         step_calc = StepCalculator((10, 6, 4, 2, 1))
@@ -165,6 +169,10 @@ class HPrey(Animat):
                 coord = random_walk()
         grid.singleton_world.move_animat(self, coord)
 
+    def reduce_wait(self):
+        if self.wait_time > 0:
+            self.wait_time -= 1
+
 
 class Predator(Animat):
 
@@ -184,7 +192,7 @@ class Predator(Animat):
                 for anim in block:
                     if isinstance(anim, EPrey) or isinstance(anim, HPrey):
                         return anim  # Return the anim object which is closest
-                    elif isinstance(anim, Predator) and anim.making_signal is True:
+                    elif isinstance(anim, Predator) and anim.making_signal == True:
                         return anim
         return None
 
@@ -226,7 +234,7 @@ class Predator(Animat):
                 reward = self.reward(animat)
                 self.update_energy(200)
                 grid.singleton_world.kill(animat)
-                # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
+                self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                 self.making_signal = False
 
             elif isinstance(animat, HPrey):
@@ -234,7 +242,7 @@ class Predator(Animat):
                     reward = self.reward(animat)
                     self.update_energy(400)
                     grid.singleton_world.kill(animat)
-                    # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
+                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
                     self.making_signal = False
 
                 elif self.energy <= animat.energy and self.wait_time == 0:
@@ -243,11 +251,12 @@ class Predator(Animat):
                     self.update_energy(-100)
                     animat.energy -= 100
 
-                    # Must wait before chasing again
+                    # Make predator wait before chasing again
                     self.wait_time = 10
+                    # Make hard prey wait before it can run away again
+                    animat.wait_time = 3
                     reward = 0
-                    # self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
-                    self.making_signal = False
+                    self.qlearn.doQLearning(reward, self.sense_state(self.__closest_animat()))
 
 
 # --- Return the state of the Animat
@@ -270,9 +279,9 @@ class Predator(Animat):
                     list_state.append(State.FollowSignal)
                 elif isinstance(closest_animat, EPrey):
                     list_state.append(State.PreyEasyClosest)
-                elif isinstance(closest_animat, HPrey) and self.making_signal is False:
+                elif isinstance(closest_animat, HPrey) and self.making_signal == False:
                     list_state.append(State.PreyHardClosest)
-                elif isinstance(closest_animat, HPrey) and self.making_signal is True:
+                elif isinstance(closest_animat, HPrey) and self.making_signal == True:
                     list_state.append(State.PredatorAskHelp)
             return list_state
 
@@ -282,9 +291,14 @@ class Predator(Animat):
     def reduce_wait(self):
         if self.wait_time > 0:
             self.wait_time -= 1
+            if self.wait_time == 0:
+                self.making_signal = False
 
     def reward(self, animat):
         if isinstance(animat, EPrey):
             return 0.5
         else:
             return 1
+
+    def printqtable(self):
+        print self.qlearn.table
