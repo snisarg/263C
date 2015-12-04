@@ -7,7 +7,8 @@ class State:
     PreyHardClosest = 2
     Hungry = 3          # If energy below threshold
     NotHungry = 4       # If energy above threshold
-    PredatorHelp = 5    # If Coordination is needed
+    PredatorAskHelp = 5    # If Coordination is needed
+    FollowSignal = 6
 
 
 class Action:
@@ -15,7 +16,7 @@ class Action:
     TowardsEasyPrey = 1     # If chosen, then make animat move towards easy prey in the environment.
     TowardsHardPrey = 2     # If chosen, then make animat move towards hard prey in the environment.
     TowardsSignal = 3       # If chosen, move animat towards signal for help
-    SignalHelp = 4          # If chosen, then make animat signal for help
+    SignalForHelp = 4       # If chosen, then make animat signal for help
 
 
 class QLearning:
@@ -39,9 +40,10 @@ class QLearning:
         self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.TowardsEasyPrey,
                                                              self.rand()]
         self.table[(State.Hungry, State.PreyHardClosest)] = [Action.TowardsHardPrey,
-                                                             self.rand(), Action.SignalHelp, self.rand()]
+                                                             self.rand(), Action.SignalForHelp, self.rand()]
         self.table[State.NotHungry] = [Action.MoveRandomly, self.rand()]
-        # self.table[State.PredatorHelp] = [Action.MoveRandomly, self.rand() , Action.TowardsSignal, self.rand()]
+        self.table[(State.Hungry, State.PredatorAskHelp)] = [Action.SignalForHelp, self.rand()]
+        self.table[(State.Hungry, State.FollowSignal)] = [Action.TowardsSignal, self.rand()]
 
 
 # --- Choose Action with max Q value
@@ -94,7 +96,7 @@ class QLearning:
         # QLearning
         newq = self.alpha*(reward+(self.gamma * newq)-oldq)  # Calculate newQ
 
-        print "Updated Q value ", oldq , newq
+        # print "Updated Q value ", oldq , newq
         # Update QValue and reflect in Table
         prev_action_row[self.prev_max_index-1] = newq
         self.table[tuple(self.prev_state)] = prev_action_row
