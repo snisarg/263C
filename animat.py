@@ -185,7 +185,7 @@ class Predator(Animat):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = 1000
-        self.hunger_threshold = 900
+        self.hunger_threshold = 1500
         self.killed = False
         self.length = 0
 
@@ -208,11 +208,11 @@ class Predator(Animat):
             coord = None    # No prey in sight
         else:
             coord = anim.position   # anim is in sight
-        # # Sense state and obtain action
+
         current_state = self.sense_state(anim)
         current_action = self.qlearn.choose_action(current_state)
 
-        if coord is not None:
+        if current_action[0] == Action.TowardsEasyPrey or current_action[0] == Action.TowardsHardPrey:
             coord = normalise_distance(
                 distance_diff(self.position, coord, config.predator_range()), config.predator_range())
         else:
