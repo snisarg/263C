@@ -39,8 +39,8 @@ class QLearning:
     # Value is a list of actions followed by their q-values
     def settable(self):
         self.table[State.PreyNotVisible] = [Action.MoveRandomly, self.rand()]
-        self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.TowardsEasyPrey, self.rand(), Action.MoveRandomly, self.rand()]
-        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.TowardsHardPrey, self.rand(), Action.MoveRandomly, self.rand()]
+        self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.TowardsEasyPrey, self.rand(), Action.MoveRandomly, 0.2]
+        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.TowardsHardPrey, self.rand(), Action.MoveRandomly, 0.2]
         self.table[State.NotHungry] = [Action.MoveRandomly, self.rand()]
         self.table[(State.Hungry, State.PredatorAskHelp)] = [Action.SignalForHelp, self.rand()]
         self.table[(State.Hungry, State.FollowSignal)] = [Action.TowardsSignal, self.rand()]
@@ -98,9 +98,9 @@ class QLearning:
 
         # print "Updated Q value ", oldq , newq
         # Update QValue and reflect in Table
-        print "Before", prev_state, prev_action
+        # print "Before", prev_state, prev_action
         prev_action[prev_max_index+1] = oldq
-        print "After", prev_action
+        # print "After", prev_action
         self.table[tuple(prev_state)] = prev_action
 
 

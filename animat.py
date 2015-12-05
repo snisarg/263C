@@ -236,11 +236,13 @@ class Predator(Animat):
             if isinstance(animat, EPrey) and self.qlearn.chosen_action == State.PreyEasyClosest:
                 print "Predator ID ", self.id
                 grid.singleton_world.kill(animat)
+                self.energy += 200
                 self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
                 break
             elif isinstance(animat, HPrey) and animat.energy <= self.energy and self.qlearn.chosen_action == State.PreyHardClosest:
                 print "Predator ID ", self.id
                 grid.singleton_world.kill(animat)
+                self.energy += 400
                 self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
                 break
             elif isinstance(animat, HPrey) and animat.energy > self.energy and self.qlearn.chosen_action == State.PreyHardClosest:
@@ -286,5 +288,7 @@ class Predator(Animat):
                     list_state.append(State.PreyHardClosest)
             return list_state
 
+    def printqtable(self):
+        print self.qlearn.table
 # So Easy prey are killed. Hard Prey fight back.
 # Predators on losing, must wait on spot, else they keep chasing hard prey continuously.
