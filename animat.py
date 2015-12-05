@@ -181,13 +181,14 @@ class HPrey(Animat):
 
 class Predator(Animat):
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, z):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = 1000
         self.hunger_threshold = 1500
         self.killed = False
         self.wait_time = 5
+        self.id = z
 
     # Returns animat closest to predator's positions
     def __closest_animat(self):
@@ -226,17 +227,24 @@ class Predator(Animat):
         grid.singleton_world.move_animat(self, coord)
 
     def act(self):
+        if self.qlearn.prev_state is None:
+            return
+        if self.qlearn.prev_state[0] == State.NotHungry or self.qlearn.prev_state == State.PreyNotVisible:
+            return
         occupants = grid.singleton_grid.get_occupants_in(self.position)
         for animat in occupants:
-            if isinstance(animat, EPrey):
+            if isinstance(animat, EPrey) and self.qlearn.chosen_action == State.PreyEasyClosest:
+                print "Predator ID ", self.id
                 grid.singleton_world.kill(animat)
                 self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
                 break
-            elif isinstance(animat, HPrey) and animat.energy <= self.energy:
+            elif isinstance(animat, HPrey) and animat.energy <= self.energy and self.qlearn.chosen_action == State.PreyHardClosest:
+                print "Predator ID ", self.id
                 grid.singleton_world.kill(animat)
                 self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
                 break
-            elif isinstance(animat, HPrey) and animat.energy > self.energy:
+            elif isinstance(animat, HPrey) and animat.energy > self.energy and self.qlearn.chosen_action == State.PreyHardClosest:
+                print "Predator ID ", self.id
                 print "Hard prey fought back at ", animat.position
                 # Both Predator and prey lose energy
                 animat.energy -= 100

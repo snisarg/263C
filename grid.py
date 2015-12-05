@@ -147,13 +147,14 @@ class World:
             self.predators[i].qlearn.prev_state = None
             self.predators[i].qlearn.prev_max_index = None
             self.predators[i].qlearn.current_action = None
+            self.predators[i].qlearn.chosen_action = None
 
 
     def __init_predator(self,count):
         for i in range(count):
             coord = [randint(0, config.grid_height()-1), randint(0, config.grid_width()-1)]
             if not self.grid.is_obstacle(coord):
-                predator = animat.Predator(coord[0], coord[1])
+                predator = animat.Predator(coord[0], coord[1], i)
                 self.predators.append(predator)
                 self.grid.add_to_position(coord, predator)
             else:

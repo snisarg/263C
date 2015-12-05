@@ -31,6 +31,7 @@ class QLearning:
         self.prev_state = None
         self.prev_max_index = None
         self.current_action = None
+        self.chosen_action = None
         self.settable()
 
 # --- Initialise Q-table
@@ -67,7 +68,7 @@ class QLearning:
             index += 2
         self.prev_state = current_state
         self.prev_max_index = max_index
-
+        self.chosen_action = self.current_action[max_index]
         # Return best action and it's q weight
         return self.current_action[max_index], self.current_action[max_index+1]
 
