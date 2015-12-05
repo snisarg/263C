@@ -97,9 +97,9 @@ class QLearning:
 
         # print "Updated Q value ", oldq , newq
         # Update QValue and reflect in Table
-        # print "Before", prev_state, prev_action
+        print "Before", prev_state, prev_action
         prev_action[prev_max_index+1] = oldq
-        # print "After", prev_action
+        print "After", prev_action
         self.table[tuple(prev_state)] = prev_action
 
 

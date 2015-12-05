@@ -187,7 +187,7 @@ class Predator(Animat):
         self.energy = 1000
         self.hunger_threshold = 1500
         self.killed = False
-        self.wait_time = 0
+        self.wait_time = 5
 
     # Returns animat closest to predator's positions
     def __closest_animat(self):
@@ -230,18 +230,21 @@ class Predator(Animat):
         for animat in occupants:
             if isinstance(animat, EPrey):
                 grid.singleton_world.kill(animat)
-                # self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
+                self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
+                break
             elif isinstance(animat, HPrey) and animat.energy <= self.energy:
                 grid.singleton_world.kill(animat)
-                # self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
+                self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
+                break
             elif isinstance(animat, HPrey) and animat.energy > self.energy:
-                print "Hard prey fought back!"
+                print "Hard prey fought back at ", animat.position
                 # Both Predator and prey lose energy
                 animat.energy -= 100
                 self.energy -= 100
                 # Predator waits for 10 seconds
                 self.wait_time = 10
-                # self.qlearn.doQLearning(self.get_reward(3), self.sense_state(self.__closest_animat()))
+                self.qlearn.doQLearning(self.get_reward(3), self.sense_state(self.__closest_animat()))
+                break
 
     def get_reward(self,x):
         if x == 1:

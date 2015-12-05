@@ -2,6 +2,7 @@ from random import randint
 import random
 import config
 import animat
+import copy
 
 
 class OccupantType:
@@ -142,7 +143,7 @@ class World:
         # Potential memory leak
         # Children have same Q tables as that of a random parent
         for i in range(predator_count):
-            self.predators[i].qlearn = random.choice(best_predators).qlearn
+            self.predators[i].qlearn = copy.deepcopy(random.choice(best_predators).qlearn)
             self.predators[i].qlearn.prev_state = None
             self.predators[i].qlearn.prev_max_index = None
             self.predators[i].qlearn.current_action = None
