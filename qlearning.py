@@ -40,9 +40,9 @@ class QLearning:
     def settable(self):
         self.table[State.PreyNotVisible] = [Action.MoveRandomly, self.rand()]
         self.table[(State.Hungry, State.PreyEasyClosest)] = [Action.TowardsEasyPrey, self.rand(), Action.MoveRandomly, 0.2]
-        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.TowardsHardPrey, self.rand(), Action.MoveRandomly, 0.2]
+        self.table[(State.Hungry, State.PreyHardClosest)] = [Action.TowardsHardPrey, self.rand(), Action.MoveRandomly, 0.2,
+                                                             Action.SignalForHelp, self.rand()]
         self.table[State.NotHungry] = [Action.MoveRandomly, self.rand()]
-        self.table[(State.Hungry, State.PredatorAskHelp)] = [Action.SignalForHelp, self.rand()]
         self.table[(State.Hungry, State.FollowSignal)] = [Action.TowardsSignal, self.rand()]
 
 

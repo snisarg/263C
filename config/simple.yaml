@@ -12,7 +12,7 @@ grass: 800
 
 clock:
   ticks: 10
-  generation_size: 150
+  generation_size: 350
 
 animats:
   count:
@@ -25,9 +25,9 @@ animats:
     hard_prey: 5
     predator: 5
   speed:
-    easy_prey: 3
-    hard_prey: 4
-    predator: 5
+    easy_prey: 5
+    hard_prey: 7
+    predator: 10
 
 
 
