@@ -179,7 +179,7 @@ class HPrey(Animat):
         if self.wait_time > 0:
             self.wait_time -= 1
             if self.wait_time == 0:
-                self.energy = random.randint(1200, 1400)
+                self.energy = 0.9 * random.randint(1200, 1400)
             return
 
         closest_animats = grid.singleton_world.around_point(self.position, config.hard_prey_range())
