@@ -244,7 +244,7 @@ class Predator(Animat):
         grid.singleton_world.move_animat(self, coord)
 
     def act(self):
-        if self.qlearn.prev_state is None:
+        if self.qlearn.prev_state is None or self.wait_time > 0:
             return
         if self.qlearn.prev_state[0] == State.NotHungry or self.qlearn.prev_state == State.PreyNotVisible:
             return
@@ -254,13 +254,13 @@ class Predator(Animat):
                 print "Predator ID ", self.id
                 grid.singleton_world.kill(animat)
                 self.energy += 200
-                self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
+                # self.qlearn.doQLearning(self.get_reward(1), self.sense_state(self.__closest_animat()))
                 break
             elif isinstance(animat, HPrey) and animat.energy <= self.energy and self.qlearn.chosen_action == State.PreyHardClosest:
                 print "Predator ID ", self.id
                 grid.singleton_world.kill(animat)
                 self.energy += 400
-                self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
+                # self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
                 break
             elif isinstance(animat, HPrey) and animat.energy > self.energy and self.qlearn.chosen_action == State.PreyHardClosest:
                 print "Predator ID ", self.id
@@ -270,7 +270,7 @@ class Predator(Animat):
                 self.energy -= 100
                 # Predator waits for 10 seconds
                 self.wait_time = 10
-                self.qlearn.doQLearning(self.get_reward(3), self.sense_state(self.__closest_animat()))
+                # self.qlearn.doQLearning(self.get_reward(3), self.sense_state(self.__closest_animat()))
                 break
 
     def get_reward(self,x):
