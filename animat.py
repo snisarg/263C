@@ -168,7 +168,7 @@ class HPrey(Animat):
     def __init__(self,x,y):
         Animat.__init__(self)
         self.position = [x, y]
-        self.energy = random.randint(1000,1200)
+        self.energy = random.randint(1200,1400)
         # Set to true prey dies
         self.killed = False
 

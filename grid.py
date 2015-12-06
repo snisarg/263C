@@ -77,6 +77,7 @@ class Grid:
         coord[1] %= config.grid_width()
         return self.grid[coord[0]][coord[1]].occupants
 
+
 class World:
 
     def __init__(self, position_grid):
@@ -225,5 +226,5 @@ class World:
         self.clock += 1  # increment timer.
 
 
-singleton_grid = Grid()
-singleton_world = World(singleton_grid)
+singleton_grid = None
+singleton_world = None
