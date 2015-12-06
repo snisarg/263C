@@ -202,7 +202,7 @@ class Predator(Animat):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = 1000
-        self.hunger_threshold = 1500
+        self.hunger_threshold = 1200
         self.killed = False
         self.wait_time = 5
         self.id = z
