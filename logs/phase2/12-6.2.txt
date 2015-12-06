@@ -1,0 +1,203 @@
+/System/Library/Frameworks/Python.framework/Versions/2.7/bin/python2.7 /Users/snisarg/Documents/Code/Python/Masters/263C/game.py
+2015-12-06 09:59:57.271 Python[5955:1658722] 09:59:57.271 WARNING:  140: This application, or a library it uses, is using the deprecated Carbon Component Manager for hosting Audio Units. Support for this will be removed in a future release. Also, this makes the host incompatible with version 3 audio units. Please transition to the API's in AudioComponent.h.
+----------Generation : 1 --------- UNIVERSE :  1
+Predator ID  4
+Hard prey fought back at  [28, 9] 4
+Predator ID  0
+Hard prey fought back at  [28, 9] 4
+Predator ID  1
+Easy killed at [35, 21]
+Predator ID  4
+Hard prey fought back at  [20, 20] 4
+Predator ID  2
+Hard prey fought back at  [20, 20] 4
+Predator ID  0
+Hard killed at [20, 20]
+Predator ID  2
+Easy killed at [21, 27]
+Predator ID  0
+Easy killed at [3, 2]
+Predator ID  4
+Hard prey fought back at  [4, 17] 4
+Predator ID  1
+Easy killed at [27, 2]
+Predator ID  2
+Easy killed at [34, 27]
+Predator ID  3
+Easy killed at [11, 0]
+Predator ID  1
+Collaborated killing at  [14, 2] 4
+Hard killed at [14, 2]
+Predator ID  3
+Hard prey fought back at  [38, 13] 2
+Predator ID  4
+Hard prey fought back at  [0, 15] 4
+Predator ID  1
+Easy killed at [36, 8]
+Predator ID  2
+Easy killed at [27, 19]
+Predator ID  3
+Easy killed at [35, 8]
+Predator ID  3
+Easy killed at [35, 37]
+Predator ID  4
+Hard prey fought back at  [14, 8] 2
+Predator ID  4
+Hard prey fought back at  [7, 16] 2
+At the end of generation  1
+****QTABLE****
+{0: [0, 0.10317197066759087], (3, 2): [2, 0.9991055957689141, 4, 0.5522677643573193], (3, 1): [1, 0.3388408198094594, 0, 0.2], 4: [0, 0.16651710558679222], (3, 6): [3, 0.7955475678139652]}
+{0: [0, 0.8163685254916567], (3, 2): [2, 0.6244262199205636, 4, 0.8114010230137109], (3, 1): [1, 0.6921028806286016, 0, 0.2], 4: [0, 0.06458901962161212], (3, 6): [3, 0.8352603068114995]}
+{0: [0, 0.34199646804668216], (3, 2): [2, 0.5825757985681561, 4, 0.5017759328895897], (3, 1): [1, 0.6375506523272998, 0, 0.2], 4: [0, 0.16535426168122325], (3, 6): [3, 0.9869160833263275]}
+{0: [0, 0.2230082784430828], (3, 2): [2, 0.4539846596590561, 4, 0.6390132060208844], (3, 1): [1, 0.8830855165962266, 0, 0.2], 4: [0, 0.4011361457231113], (3, 6): [3, 0.7089137546310551]}
+{0: [0, 0.8758171552286279], (3, 2): [2, -0.3432619234066956, 4, -0.15399715157618105], (3, 1): [1, 0.09229447574144867, 0, 0.2], 4: [0, 0.032914105393584525], (3, 6): [3, 0.4040881780074328]}
+----------Generation : 2 --------- UNIVERSE :  1
+Predator ID  2
+Hard prey fought back at  [12, 39] 4
+Predator ID  1
+Hard prey fought back at  [12, 39] 2
+Predator ID  4
+Collaborated killing at  [12, 39] 4
+Hard killed at [12, 39]
+Predator ID  3
+Easy killed at [0, 13]
+Predator ID  4
+Easy killed at [0, 13]
+Predator ID  0
+Hard prey fought back at  [36, 26] 4
+Predator ID  3
+Easy killed at [0, 24]
+Predator ID  3
+Easy killed at [35, 23]
+Predator ID  2
+Hard prey fought back at  [29, 29] 2
+Predator ID  4
+Collaborated killing at  [0, 29] 4
+Hard killed at [0, 29]
+Predator ID  2
+Easy killed at [17, 25]
+Predator ID  0
+Easy killed at [32, 33]
+Predator ID  4
+Hard prey fought back at  [1, 24] 4
+Predator ID  0
+Hard prey fought back at  [39, 26] 2
+Predator ID  1
+Collaborated killing at  [39, 26] 4
+Hard killed at [39, 26]
+Predator ID  1
+Hard prey fought back at  [0, 25] 4
+Predator ID  2
+Collaborated killing at  [35, 3] 4
+Hard killed at [35, 3]
+Predator ID  2
+Collaborated killing at  [35, 25] 4
+Hard killed at [35, 25]
+Predator ID  2
+Collaborated killing at  [26, 24] 4
+Hard killed at [26, 24]
+Predator ID  0
+Collaborated killing at  [30, 36] 4
+Hard killed at [30, 36]
+Predator ID  2
+Collaborated killing at  [30, 22] 4
+Hard killed at [30, 22]
+Predator ID  2
+Easy killed at [11, 30]
+Predator ID  1
+Hard killed at [26, 28]
+Predator ID  4
+Easy killed at [21, 29]
+Predator ID  0
+Collaborated killing at  [39, 15] 4
+Hard killed at [39, 15]
+At the end of generation  2
+****QTABLE****
+{0: [0, 0.8163685254916567], (3, 2): [2, 0.43962792407933615, 4, 0.573699336924117], (3, 1): [1, 1.1126956065557092, 0, 0.2], 4: [0, 0.06458901962161212], (3, 6): [3, 0.8352603068114995]}
+{0: [0, 0.34199646804668216], (3, 2): [2, 0.5847281941852313, 4, 0.29174041423179786], (3, 1): [1, 0.6375506523272998, 0, 0.2], 4: [0, 0.16535426168122325], (3, 6): [3, 1.201092230909465]}
+{0: [0, 1.1500411549818237], (3, 2): [2, 0.4241194944495992, 4, 0.5960671529994669], (0,): [0, 1.1500411549818237], 4: [0, 0.06458901962161212], (3, 1): [1, 0.7204055371661184, 0, 0.2], (3, 6): [3, 0.8352603068114995]}
+{0: [0, 0.10317197066759087], (3, 2): [2, 0.9991055957689141, 4, 0.5522677643573193], (3, 1): [1, 0.5487112576816264, 0, 0.2], 4: [0, 0.16651710558679222], (3, 6): [3, 0.7955475678139652]}
+{0: [0, 0.8163685254916567], (3, 2): [2, 0.6244262199205636, 4, 0.5951730025534366], (3, 1): [1, 0.8695549930013219, 0, 0.2], 4: [0, 0.06458901962161212], (3, 6): [3, 0.8352603068114995]}
+----------Generation : 3 --------- UNIVERSE :  1
+Predator ID  4
+Easy killed at [18, 5]
+Predator ID  2
+Hard prey fought back at  [20, 20] 2
+Predator ID  3
+Hard prey fought back at  [20, 20] 2
+Predator ID  4
+Hard prey fought back at  [24, 5] 4
+Predator ID  0
+Hard prey fought back at  [24, 5] 4
+Predator ID  1
+Easy killed at [16, 39]
+Predator ID  1
+Easy killed at [2, 39]
+Predator ID  2
+Easy killed at [31, 28]
+Predator ID  2
+Hard killed at [19, 14]
+Predator ID  4
+Collaborated killing at  [20, 9] 4
+Hard killed at [20, 9]
+Predator ID  1
+Collaborated killing at  [19, 36] 4
+Hard killed at [19, 36]
+Predator ID  0
+Easy killed at [29, 4]
+Predator ID  4
+Hard prey fought back at  [11, 16] 4
+Predator ID  1
+Collaborated killing at  [11, 16] 4
+Hard killed at [11, 16]
+Predator ID  0
+Easy killed at [14, 28]
+Predator ID  1
+Easy killed at [19, 23]
+Predator ID  4
+Hard killed at [24, 26]
+Predator ID  3
+Hard prey fought back at  [28, 19] 2
+Predator ID  3
+Hard prey fought back at  [20, 3] 4
+At the end of generation  3
+****QTABLE****
+{0: [0, 1.1500411549818237], (3, 2): [2, 0.4241194944495992, 4, 0.4838611302963018], (0,): [0, 1.1500411549818237], 4: [0, 0.06458901962161212], (3, 1): [1, 0.8898774778943401, 0, 0.2], (3, 6): [3, 0.8352603068114995]}
+{0: [0, 1.1500411549818237], (3, 2): [2, 0.4241194944495992, 4, 0.5960671529994669], (0,): [0, 1.1500411549818237], 4: [0, 0.06458901962161212], (3, 1): [1, 0.988679430839241, 0, 0.2], (3, 6): [3, 0.8352603068114995]}
+{0: [0, 0.10317197066759087], (3, 2): [2, 0.7884150814038817, 4, 0.5522677643573193], (3, 1): [1, 0.6646184566849095, 0, 0.2], 4: [0, 0.16651710558679222], (3, 6): [3, 0.7955475678139652]}
+{0: [0, 0.34199646804668216], (3, 2): [2, 0.17489083931175697, 4, 0.09495169563384107], (3, 1): [1, 0.6375506523272998, 0, 0.2], 4: [0, 0.16535426168122325], (3, 6): [3, 1.201092230909465]}
+{0: [0, 1.4770403318821872], (3, 2): [2, 0.5509216190915696, 4, 0.3940963121337697], (0,): [0, 1.4770403318821872], 4: [0, 0.06458901962161212], (3, 1): [1, 0.805997426422796, 0, 0.2], (3, 6): [3, 0.8352603068114995]}
+----------Generation : 4 --------- UNIVERSE :  1
+Predator ID  3
+Hard prey fought back at  [28, 16] 2
+Predator ID  4
+Hard prey fought back at  [28, 16] 2
+Predator ID  0
+Hard prey fought back at  [23, 9] 2
+Predator ID  3
+Hard prey fought back at  [23, 9] 4
+Predator ID  4
+Collaborated killing at  [23, 9] 4
+Hard killed at [23, 9]
+Predator ID  4
+Hard prey fought back at  [15, 6] 4
+Predator ID  1
+Hard prey fought back at  [15, 6] 4
+Predator ID  2
+Hard prey fought back at  [31, 18] 2
+Predator ID  3
+Hard killed at [31, 18]
+Predator ID  2
+Hard prey fought back at  [34, 18] 4
+Predator ID  4
+Hard killed at [34, 18]
+At the end of generation  4
+****QTABLE****
+{0: [0, 1.4770403318821872], (3, 2): [2, 0.39108415049932554, 4, 0.3940963121337697], (0,): [0, 1.4770403318821872], 4: [0, 0.06458901962161212], (3, 1): [1, 0.805997426422796, 0, 0.2], (3, 6): [3, 1.2840755051879933]}
+{0: [0, 1.1500411549818237], (3, 2): [2, 0.4241194944495992, 4, 0.4838611302963018], (0,): [0, 1.1500411549818237], 4: [0, 0.06458901962161212], (3, 1): [1, 0.988679430839241, 0, 0.2], (3, 6): [3, 0.8352603068114995]}
+{0: [0, 0.10317197066759087], (3, 2): [2, 0.4493030198432717, 4, 0.26038516620602176], (3, 1): [1, 0.6646184566849095, 0, 0.2], 4: [0, 0.16651710558679222], (3, 6): [3, 0.7955475678139652]}
+{0: [0, 0.4511085312542391], (3, 2): [2, 0.6406419515003804, 4, 0.26038516620602176], (0,): [0, 0.4511085312542391], 4: [0, 0.16651710558679222], (3, 1): [1, 0.6646184566849095, 0, 0.2], (3, 6): [3, 0.7955475678139652]}
+{0: [0, 0.10317197066759087], (3, 2): [2, 0.5780133705947837, 4, 0.26038516620602176], (3, 1): [1, 0.6646184566849095, 0, 0.2], 4: [0, 0.16651710558679222], (3, 6): [3, 0.7955475678139652]}
+----------Generation : 5 --------- UNIVERSE :  1
+
+Process finished with exit code 0
