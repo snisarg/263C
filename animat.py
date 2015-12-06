@@ -9,24 +9,41 @@ def random_walk():
     return [random.randint(-1, 1), random.randint(-1, 1)]
 
 
-# TODO Toroidal differences not accurate.
 def distance_diff(reference, target, vision_range):
-    # print (reference, target)
-    height = -reference[0]+target[0]
-    width = -reference[1]+target[1]
-    if abs(height) > vision_range:
-        height += 2 * reference[0]
-    if abs(width) > vision_range:
-        width += 2 * reference[1]
-    height_multiplier = 1
-    width_multiplier = 1
-    if height < 0:
-        height_multiplier = -1
-    if width < 0:
-        width_multiplier = -1
-    height %= (vision_range + 1) % config.grid_height()
-    width %= (vision_range + 1) % config.grid_width()
-    return [height * height_multiplier, width * width_multiplier]
+    # print (reference, target, vision_range)
+    ref_h = reference[0]
+    ref_w = reference[1]
+    tar_h = target[0]
+    tar_w = target[1]
+
+    height = tar_h - ref_h
+    width = tar_w - ref_w
+
+    if abs(height) > (vision_range + 1):
+        if ref_h > tar_h:
+            tar_h += config.grid_height()
+        else:
+            ref_h += config.grid_height()
+        height = tar_h - ref_h
+        height_sign = 1
+        if height < 0:
+            height_sign = -1
+        height %= vision_range + 1
+        height *= height_sign
+
+    if abs(width) > (vision_range + 1):
+        if ref_w > tar_w:
+            tar_w += config.grid_width()
+        else:
+            ref_w += config.grid_width()
+        width = tar_w - ref_w
+        width_sign = 1
+        if width < 0:
+            width_sign = -1
+        width %= vision_range + 1
+        width *= width_sign
+
+    return [height, width]
 
 
 def normalise_distance(coord, level):
@@ -130,8 +147,8 @@ class EPrey(Animat):
                         # Escaping 0 differences for now because of toroidal diff bug
                         diff = distance_diff(self.position, anim.position, config.easy_prey_range())
                         # print diff
-                        if not (diff[0] == 0 and diff[1] == 0):
-                            step_calc.add(diff)
+                        #if not (diff[0] == 0 and diff[1] == 0):
+                        step_calc.add(diff)
 
         if not step_calc.get_count() == 0:
             coord = step_calc.get_decision()
@@ -166,8 +183,8 @@ class HPrey(Animat):
                     if isinstance(anim, Predator):
                         # Escaping 0 differences for now because of toroidal diff bug
                         diff = distance_diff(self.position, anim.position, config.hard_prey_range())
-                        if not (diff[0] == 0 and diff[1] == 0):
-                            step_calc.add(diff)
+                        # if not (diff[0] == 0 and diff[1] == 0):
+                        step_calc.add(diff)
 
         if not step_calc.get_count() == 0:
             coord = step_calc.get_decision()
