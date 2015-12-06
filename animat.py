@@ -209,7 +209,7 @@ class Predator(Animat):
         Animat.__init__(self)
         self.position = [x, y]
         self.energy = 1000
-        self.hunger_threshold = 1500
+        self.hunger_threshold = 1210
         self.killed = False
         self.wait_time = 5
         self.id = z
@@ -276,20 +276,33 @@ class Predator(Animat):
             elif isinstance(animat, HPrey) and animat.energy <= self.energy:
                 if self.qlearn.chosen_action == Action.TowardsHardPrey:
                     print "Predator ID ", self.id
+                    collaborators = []
+                    for all_animats in occupants:
+                        if isinstance(all_animats, Predator) and \
+                                (all_animats.qlearn.chosen_action == Action.TowardsSignal or all_animats.qlearn.chosen_action == Action.SignalForHelp):
+                            collaborators.append(all_animats)
+                    for all_winners in collaborators:
+                        all_winners.energy += 600 / len(collaborators)
+                        all_winners.qlearn.doQLearning(self.get_reward(4), self.sense_state(self.__closest_animat()))
+                    if len(collaborators) > 0:
+                        print "Collaborated killing at ", self.position, self.qlearn.chosen_action
+                        self.qlearn.doQLearning(-0.2, self.sense_state(self.__closest_animat()))
+                    else:
+                        print "Killed alone!"
+                        self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
                     grid.singleton_world.kill(animat)
-                    self.energy += 400
-                    self.qlearn.doQLearning(self.get_reward(2), self.sense_state(self.__closest_animat()))
+
                 elif self.qlearn.chosen_action == Action.TowardsSignal or self.qlearn.chosen_action == Action.SignalForHelp:
                     print "Predator ID ", self.id
                     print "Collaborated killing at ", self.position, self.qlearn.chosen_action
                     grid.singleton_world.kill(animat)
                     collaborators = []
                     for all_animats in occupants:
-                        if isinstance(all_animats, Predator) and all_animats.wait_time>0:
-                            all_animats.signal = False
+                        if isinstance(all_animats, Predator) and \
+                                (all_animats.qlearn.chosen_action == Action.TowardsSignal or all_animats.qlearn.chosen_action == Action.SignalForHelp):
                             collaborators.append(all_animats)
                     for all_winners in collaborators:
-                        all_winners.energy += 200
+                        all_winners.energy += 600 / len(collaborators)
                         all_winners.qlearn.doQLearning(self.get_reward(4), self.sense_state(self.__closest_animat()))
 
                 break
@@ -297,9 +310,9 @@ class Predator(Animat):
                 (self.qlearn.chosen_action == Action.TowardsHardPrey or self.qlearn.chosen_action == Action.TowardsSignal \
                          or self.qlearn.chosen_action == Action.SignalForHelp):
                 print "Predator ID ", self.id
-                print "Hard prey fought back at ", animat.position, self.qlearn.chosen_action
+                print "Hard prey fought back at ", animat.position, self.qlearn.chosen_action, self.energy , animat.energy
                 # Both Predator and prey lose energy
-                animat.energy -= 200
+                animat.energy -= 400
                 # self.energy -= 100
                 # Predator waits for 10 seconds
                 self.wait_time = 15
@@ -311,7 +324,7 @@ class Predator(Animat):
 
     def get_reward(self,x):
         if x == 1:
-            return 0.5
+            return 0.25
         elif x == 2:
             return 1
         elif x == 3:

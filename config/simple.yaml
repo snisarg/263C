@@ -1,6 +1,6 @@
 grid:
-  width: 40
-  height: 40
+  width: 60
+  height: 60
   cell:
     width: 15
     height: 15
@@ -16,10 +16,10 @@ clock:
 
 animats:
   count:
-    easy_prey: 25
-    hard_prey: 20
-    predator: 5
-    best_predator: 3
+    easy_prey: 10
+    hard_prey: 40
+    predator: 10
+    best_predator: 5
   range:
     easy_prey: 5
     hard_prey: 5
