@@ -16,7 +16,7 @@ game_grid = grid.singleton_grid.grid
 screen = pygame.display.set_mode(
     (len(game_grid)*config.cell_pixel_height(), len(game_grid[0])*config.cell_pixel_width()))
 
-for i in range(10):
+for i in range(5):
     if done:
         break
 
